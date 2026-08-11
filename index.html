@@ -6,12 +6,14 @@
     <title>Metaphor — Искренние и точные слова</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
+            --bg-color: #0b0f19;
+            --card-bg: #151d30;
             --accent-color: #f59e0b;
+            --accent-hover: #d97706;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: #334155;
+            --border-color: #26334d;
+            --chip-bg: #1e293b;
         }
 
         * {
@@ -28,43 +30,45 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 20px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 640px;
         }
 
         header {
-            width: 100%;
-            max-width: 600px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.6rem;
+            font-weight: 800;
             color: var(--accent-color);
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .lang-select {
             background: var(--card-bg);
             color: var(--text-main);
             border: 1px solid var(--border-color);
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 8px;
             outline: none;
             cursor: pointer;
+            font-size: 0.9rem;
         }
 
         main {
-            width: 100%;
-            max-width: 600px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
         }
 
         .form-group {
@@ -74,41 +78,71 @@
         }
 
         label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 600;
             color: var(--text-muted);
         }
 
-        input, select, textarea {
+        input, select {
             width: 100%;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 12px;
+            padding: 13px;
             border-radius: 10px;
             font-size: 1rem;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus, select:focus {
             border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+        }
+
+        /* Быстрые пресеты (Chips) */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .chip {
+            background: var(--chip-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            border-color: var(--accent-color);
+            color: var(--text-main);
         }
 
         button.btn-primary {
             background: var(--accent-color);
-            color: #000;
-            font-weight: 600;
+            color: #0b0f19;
+            font-weight: 700;
             border: none;
-            padding: 14px;
+            padding: 15px;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 1.05rem;
             cursor: pointer;
-            transition: opacity 0.2s;
-            margin-top: 10px;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 5px;
         }
 
         button.btn-primary:hover {
-            opacity: 0.9;
+            background: var(--accent-hover);
+        }
+
+        button.btn-primary:active {
+            transform: scale(0.99);
         }
 
         button:disabled {
@@ -120,103 +154,126 @@
             display: none;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 22px;
             margin-top: 10px;
-            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
         .result-text {
             font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            line-height: 1.7;
+            margin-bottom: 22px;
             white-space: pre-wrap;
+            color: var(--text-main);
         }
 
         .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 10px;
             border-top: 1px solid var(--border-color);
-            padding-top: 15px;
+            padding-top: 18px;
         }
 
         .btn-action {
-            background: transparent;
+            background: var(--chip-bg);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 8px 14px;
+            padding: 10px 12px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
+            font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            transition: background 0.2s;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
         }
 
         .btn-action:hover {
             background: var(--border-color);
+            border-color: var(--accent-color);
         }
 
         .status-msg {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--accent-color);
             margin-top: 5px;
             display: none;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">METAPHOR</div>
-        <select id="langSelect" class="lang-select">
-            <option value="ru">Русский</option>
-            <option value="uz">O'zbekcha</option>
-            <option value="en">English</option>
-        </select>
-    </header>
-
-    <main>
-        <div class="form-group">
-            <label for="step1">От кого и кому:</label>
-            <input type="text" id="step1" placeholder="Например: От друга другу, от сына маме">
-        </div>
-
-        <div class="form-group">
-            <label for="step2">Ситуация / Повод:</label>
-            <input type="text" id="step2" placeholder="Например: День рождения, поддержка в трудную минуту">
-        </div>
-
-        <div class="form-group">
-            <label for="step3">Тон / Тональность:</label>
-            <select id="step3">
-                <option value="Искренний и теплый">Искренний и теплый</option>
-                <option value="Восточная классика">Восточная классика</option>
-                <option value="Западная драма">Западная драма</option>
-                <option value="Современный эпос">Современный эпос</option>
-                <option value="Легкий и с юмором">Легкий и с юмором</option>
+    <div class="container">
+        <header>
+            <div class="logo">METAPHOR</div>
+            <select id="langSelect" class="lang-select">
+                <option value="ru">Русский</option>
+                <option value="uz">O'zbekcha</option>
+                <option value="en">English</option>
             </select>
-        </div>
+        </header>
 
-        <button id="generateBtn" class="btn-primary">Сгенерировать текст</button>
-        <div id="statusMsg" class="status-msg"></div>
-
-        <div id="resultCard" class="result-card">
-            <div id="resultText" class="result-text"></div>
-            
-            <div class="action-buttons">
-                <button id="copyBtn" class="btn-action">📋 Копировать</button>
-                <button id="listenBtn" class="btn-action">🔊 Озвучить</button>
-                <button id="downloadBtn" class="btn-action">🎨 Download Card</button>
-                <button id="shareTelegramBtn" class="btn-action">✈️ В Telegram</button>
+        <main>
+            <!-- Шаг 1 -->
+            <div class="form-group">
+                <label for="step1">От кого и кому:</label>
+                <input type="text" id="step1" placeholder="Введите или выберите вариант ниже...">
+                <div class="chips-container" id="chipsStep1">
+                    <span class="chip" data-value="От отца сыну">От отца сыну</span>
+                    <span class="chip" data-value="От друга другу">От друга другу</span>
+                    <span class="chip" data-value="От сына маме">От сына маме</span>
+                    <span class="chip" data-value="Коллеге от команды">Коллеге от команды</span>
+                </div>
             </div>
-        </div>
-    </main>
+
+            <!-- Шаг 2 -->
+            <div class="form-group">
+                <label for="step2">Ситуация / Повод:</label>
+                <input type="text" id="step2" placeholder="Введите или выберите быструю подсказку...">
+                <div class="chips-container" id="chipsStep2">
+                    <span class="chip" data-value="День рождения">День рождения</span>
+                    <span class="chip" data-value="Поддержка в важный момент">Поддержка</span>
+                    <span class="chip" data-value="Сдача экзаменов / IELTS">Сдача экзаменов</span>
+                    <span class="chip" data-value="Слова благодарности">Благодарность</span>
+                </div>
+            </div>
+
+            <!-- Шаг 3 -->
+            <div class="form-group">
+                <label for="step3">Тон / Тональность:</label>
+                <select id="step3">
+                    <option value="Искренний и теплый">Искренний и теплый</option>
+                    <option value="Восточная классика">Восточная классика</option>
+                    <option value="Западная драма">Западная драма</option>
+                    <option value="Современный эпос">Современный эпос</option>
+                    <option value="Легкий и с юмором">Легкий и с юмором</option>
+                </select>
+            </div>
+
+            <button id="generateBtn" class="btn-primary">Сгенерировать текст</button>
+            <div id="statusMsg" class="status-msg"></div>
+
+            <!-- Карточка результата -->
+            <div id="resultCard" class="result-card">
+                <div id="resultText" class="result-text"></div>
+                
+                <div class="action-buttons">
+                    <button id="copyBtn" class="btn-action">📋 Копировать</button>
+                    <button id="listenBtn" class="btn-action">🔊 Озвучить</button>
+                    <button id="downloadBtn" class="btn-action">🎨 Скачать карту</button>
+                    <button id="shareTelegramBtn" class="btn-action">✈️ В Telegram</button>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <script>
-        // Универсальная функция отправки аналитики
+        // Функция трекинга аналитики
         async function trackEvent(payload) {
             try {
                 await fetch('/api/track', {
@@ -225,12 +282,86 @@
                     body: JSON.stringify(payload)
                 });
             } catch (e) {
-                console.error('Analytics tracking error:', e);
+                console.error('Analytics error:', e);
             }
+        }
+
+        // Генерация картинки-открытки на HTML5 Canvas
+        function generateCardCanvas(text, tone) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1080;
+            canvas.height = 1080;
+            const ctx = canvas.getContext('2d');
+
+            // Фон (Градиент)
+            const grad = ctx.createLinearGradient(0, 0, 1080, 1080);
+            grad.addColorStop(0, '#0b0f19');
+            grad.addColorStop(0.5, '#151d30');
+            grad.addColorStop(1, '#05070c');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 1080, 1080);
+
+            // Золотая рамка
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 6;
+            ctx.strokeRect(50, 50, 980, 980);
+
+            // Логотип
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 42px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('METAPHOR', 540, 130);
+
+            // Тональность
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '24px sans-serif';
+            ctx.fillText(`— ${tone} —`, 540, 185);
+
+            // Разбивка текста по строкам
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '32px sans-serif';
+            const words = text.split(' ');
+            let line = '';
+            let lines = [];
+            const maxWidth = 860;
+            const lineHeight = 50;
+
+            for (let n = 0; n < words.length; n++) {
+                let testLine = line + words[n] + ' ';
+                let metrics = ctx.measureText(testLine);
+                if (metrics.width > maxWidth && n > 0) {
+                    lines.push(line);
+                    line = words[n] + ' ';
+                } else {
+                    line = testLine;
+                }
+            }
+            lines.push(line);
+
+            // Отрисовка по центру
+            let startY = 540 - ((lines.length * lineHeight) / 2);
+            for (let i = 0; i < lines.length; i++) {
+                ctx.fillText(lines[i], 540, startY + (i * lineHeight));
+            }
+
+            // Водяной знак
+            ctx.fillStyle = '#64748b';
+            ctx.font = '20px sans-serif';
+            ctx.fillText('metaphor.app', 540, 980);
+
+            // Скачивание PNG
+            const link = document.createElement('a');
+            link.download = `metaphor-card-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             const langSelect = document.getElementById('langSelect');
+            const step1Input = document.getElementById('step1');
+            const step2Input = document.getElementById('step2');
+            const step3Select = document.getElementById('step3');
+
             const generateBtn = document.getElementById('generateBtn');
             const resultCard = document.getElementById('resultCard');
             const resultText = document.getElementById('resultText');
@@ -241,35 +372,39 @@
             const downloadBtn = document.getElementById('downloadBtn');
             const shareTelegramBtn = document.getElementById('shareTelegramBtn');
 
-            // Восстановление языка из localStorage
+            // Поддержка быстрых подсказок (Chips)
+            document.querySelectorAll('.chip').forEach(chip => {
+                chip.addEventListener('click', (e) => {
+                    const targetInput = e.target.closest('.form-group').querySelector('input');
+                    targetInput.value = e.target.getAttribute('data-value');
+                });
+            });
+
+            // Восстановление языка
             const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
             langSelect.value = savedLang;
 
-            // 1. Фиксируем визит
-            trackEvent({
-                type: 'visit',
-                language: savedLang
-            });
+            // Фиксация визита
+            trackEvent({ type: 'visit', language: savedLang });
 
-            // Смена языка
             langSelect.addEventListener('change', (e) => {
                 localStorage.setItem('selectedLanguage', e.target.value);
             });
 
             // Генерация текста
             generateBtn.addEventListener('click', async () => {
-                const step1 = document.getElementById('step1').value.trim();
-                const step2 = document.getElementById('step2').value.trim();
-                const step3 = document.getElementById('step3').value;
+                const step1 = step1Input.value.trim();
+                const step2 = step2Input.value.trim();
+                const step3 = step3Select.value;
                 const lang = langSelect.value;
 
                 if (!step1 || !step2) {
-                    alert('Пожалуйста, заполните поля ситуаций и получателя.');
+                    alert('Заполните, пожалуйста, оба поля или выберите быстрые подсказки ниже.');
                     return;
                 }
 
                 generateBtn.disabled = true;
-                generateBtn.innerText = 'Генерируем...';
+                generateBtn.innerText = 'Генерируем слова...';
                 statusMsg.style.display = 'none';
 
                 try {
@@ -285,7 +420,6 @@
                         resultText.innerText = data.text;
                         resultCard.style.display = 'block';
 
-                        // Трекинг успешной генерации
                         trackEvent({
                             type: 'event',
                             eventName: 'generation_success',
@@ -293,11 +427,11 @@
                             tone: step3
                         });
                     } else {
-                        statusMsg.innerText = data.text || 'Ошибка при генерации.';
+                        statusMsg.innerText = data.text || 'Ошибка генерации.';
                         statusMsg.style.display = 'block';
                     }
                 } catch (err) {
-                    statusMsg.innerText = 'Слова потерялись в пути. Проверьте соединение.';
+                    statusMsg.innerText = 'Ошибка связи с сервером.';
                     statusMsg.style.display = 'block';
                 } finally {
                     generateBtn.disabled = false;
@@ -305,62 +439,45 @@
                 }
             });
 
-            // Кнопка: Копировать
+            // Копирование
             copyBtn.addEventListener('click', () => {
-                const text = resultText.innerText;
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('Текст скопирован в буфер обмена!');
-                    trackEvent({
-                        type: 'event',
-                        eventName: 'copy_text',
-                        language: langSelect.value,
-                        tone: document.getElementById('step3').value
-                    });
+                navigator.clipboard.writeText(resultText.innerText).then(() => {
+                    alert('Текст скопирован!');
+                    trackEvent({ type: 'event', eventName: 'copy_text', language: langSelect.value, tone: step3Select.value });
                 });
             });
 
-            // Кнопка: Озвучить
+            // Озвучка (Надежный Web Speech API)
             listenBtn.addEventListener('click', () => {
                 const text = resultText.innerText;
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel(); // сброс предыдущей речи
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = langSelect.value === 'uz' ? 'uz-UZ' : (langSelect.value === 'en' ? 'en-US' : 'ru-RU');
-                    window.speechSynthesis.speak(utterance);
-
-                    trackEvent({
-                        type: 'event',
-                        eventName: 'listen',
-                        language: langSelect.value,
-                        tone: document.getElementById('step3').value
-                    });
-                } else {
-                    alert('Ваш браузер не поддерживает озвучку текста.');
+                if (!('speechSynthesis' in window)) {
+                    alert('Ваш браузер не поддерживает озвучку.');
+                    return;
                 }
+
+                window.speechSynthesis.cancel(); // сбросить старую речь
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                const langMap = { ru: 'ru-RU', uz: 'uz-UZ', en: 'en-US' };
+                utterance.lang = langMap[langSelect.value] || 'ru-RU';
+                utterance.rate = 0.95; // комфортный темп
+
+                window.speechSynthesis.speak(utterance);
+
+                trackEvent({ type: 'event', eventName: 'listen', language: langSelect.value, tone: step3Select.value });
             });
 
-            // Кнопка: Download Card
+            // Скачивание открытки (Canvas)
             downloadBtn.addEventListener('click', () => {
-                alert('Функция генерации картинки-открытки подготавливается!');
-                trackEvent({
-                    type: 'event',
-                    eventName: 'download_card_click',
-                    language: langSelect.value,
-                    tone: document.getElementById('step3').value
-                });
+                generateCardCanvas(resultText.innerText, step3Select.value);
+                trackEvent({ type: 'event', eventName: 'download_card', language: langSelect.value, tone: step3Select.value });
             });
 
-            // Кнопка: В Telegram
+            // В Telegram
             shareTelegramBtn.addEventListener('click', () => {
                 const text = encodeURIComponent(resultText.innerText);
                 window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
-
-                trackEvent({
-                    type: 'event',
-                    eventName: 'telegram_share',
-                    language: langSelect.value,
-                    tone: document.getElementById('step3').value
-                });
+                trackEvent({ type: 'event', eventName: 'telegram_share', language: langSelect.value, tone: step3Select.value });
             });
         });
     </script>
