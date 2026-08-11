@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metaphor — Искусство выражать чувства</title>
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#141415">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Библиотека для создания изображений -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #141415;
+            --surface: #1c1c1e;
+            --accent: #d1a766;
+            --text-main: #f0ebe1;
+            --text-muted: #8e8e93;
+            --border: #2c2c2e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            padding: 0 20px; 
+        }
+
+        .container { max-width: 600px; margin: 40px auto 100px; }
+        
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 32px; 
+            text-align: center; 
+            color: var(--text-main); 
+            margin-bottom: 8px; 
+            letter-spacing: 2px;
+        }
+
+        .subtitle { 
+            text-align: center; 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+            margin-bottom: 40px; 
+        }
+
+        .section-title { 
+            font-family: 'Playfair Display', serif; 
+            color: var(--accent); 
+            font-size: 1.1rem; 
+            margin-bottom: 15px; 
+            margin-top: 30px; 
+        }
+
+        .cards-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            margin-bottom: 20px; 
+        }
+
+        @media (max-width: 600px) {
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+
+        .card { 
+            background: var(--surface); 
+            border: 1px solid var(--border); 
+            padding: 16px; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            transition: 0.3s; 
+        }
+
+        .card:hover { border-color: var(--accent); }
+        .card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+        .card-title { 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            margin-bottom: 6px; 
+            color: var(--text-main); 
+        }
+
+        .card-desc { 
+            font-size: 0.75rem; 
+            color: var(--text-muted); 
+            line-height: 1.4; 
+        }
+
+        .btn-main { 
+            background: transparent; 
+            color: var(--accent); 
+            border: 1px solid var(--accent); 
+            padding: 16px 24px; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 30px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            transition: 0.3s; 
+        }
+
+        .btn-main:hover { 
+            background: var(--accent); 
+            color: var(--bg-color); 
+        }
+
+        /* Экран смартфона (мокап-рамка) */
+        .phone-mockup {
+            display: none;
+            margin-top: 40px;
+            background: #000;
+            border: 12px solid #2c2c2e;
+            border-radius: 36px;
+            padding: 30px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            position: relative;
+        }
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 14px;
+            background: #2c2c2e;
+            border-radius: 10px;
+        }
+
+        #result-section { 
+            margin-top: 10px; 
+            padding: 20px; 
+            background: var(--surface); 
+            border-left: 4px solid var(--accent); 
+            border-radius: 4px; 
+        }
+
+        #result-text { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 22px; 
+            line-height: 1.6; 
+            color: var(--text-main); 
+            margin-bottom: 20px; 
+            white-space: pre-wrap; 
+        }
+
+        .result-actions { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            margin-top: 15px; 
+            justify-content: center; 
+        }
+        
+        .btn-tuning { 
+            background: transparent; 
+            border: 1px solid var(--border); 
+            color: var(--text-muted); 
+            padding: 8px 16px; 
+            font-size: 0.8rem; 
+            cursor: pointer; 
+            border-radius: 20px; 
+            transition: 0.3s; 
+        }
+        .btn-tuning:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* История версий */
+        .versions-section {
+            margin-top: 25px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+        .versions-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .version-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .version-item:hover {
+            color: var(--text-main);
+            border-color: var(--accent);
+        }
+
+        /* Скрытый блок для открытки */
+        #export-card {
+            display: none;
+            background: #141415;
+            color: #f0ebe1;
+            padding: 60px;
+            width: 800px;
+            min-height: 800px;
+            font-family: 'Cormorant Garamond', serif;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 20px solid #d1a766;
+            position: absolute;
+            left: -9999px;
+        }
+
+        .export-text { font-size: 38px; line-height: 1.5; margin-bottom: 40px; }
+        .export-logo { font-family: 'Playfair Display', serif; font-size: 24px; color: #d1a766; letter-spacing: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Metaphor</h1>
+    <div class="subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
+    
+    <!-- 1. Кто и кому -->
+    <div class="section-title">1. Кто и кому?</div>
+    <div class="cards-grid" id="group-1">
+        <div class="card active" onclick="selectCard(this)">
+            <div class="card-title">Парень ➔ Девушке</div>
+            <div class="card-desc">Романтика, примирение, признание</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Отец ➔ Дочери</div>
+            <div class="card-desc">Наставление, забота, благословение</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Наставник ➔ Команде</div>
+            <div class="card-desc">Мотивация, профессиональная поддержка</div>
+        </div>
+    </div>
+
+    <!-- 2. Ситуация и Чувство -->
+    <div class="section-title">2. Ситуация и Чувство</div>
+    <div class="cards-grid" id="group-2">
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Тяжелая ссора</div>
+            <div class="card-desc">Гордость мешает сказать «прости»</div>
+        </div>
+        <div class="card active" onclick="selectCard(this)">
+            <div class="card-title">День до венчания</div>
+            <div class="card-desc">Светлая грусть расставания</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">В трудный час</div>
+            <div class="card-desc">Опора, когда опускаются руки</div>
+        </div>
+    </div>
+
+    <!-- 3. Интонация -->
+    <div class="section-title">3. Интонация</div>
+    <div class="cards-grid" id="group-3">
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Восточная классика</div>
+            <div class="card-desc">Метафоры Навои и Фирдоуси</div>
+        </div>
+        <div class="card active" onclick="selectCard(this)">
+            <div class="card-title">Западная драма</div>
+            <div class="card-desc">Стиль «Ромео и Джульетты»</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Современный эпос</div>
+            <div class="card-desc">Монументально, без пафоса</div>
+        </div>
+    </div>
+
+    <button class="btn-main" onclick="generateText()">Создать слова</button>
+
+    <!-- Смартфон-мокап с результатом -->
+    <div class="phone-mockup" id="phone-mockup">
+        <div id="result-section">
+            <div id="result-text"></div>
+            <div class="result-actions" id="tuning-bar">
+                <button class="btn-tuning" onclick="tuneText('Сделай короче')">Короче</button>
+                <button class="btn-tuning" onclick="tuneText('Добавь больше метафор')">Метафоры</button>
+                <button class="btn-tuning" onclick="tuneText('Смени стиль на более формальный')">Более формально</button>
+            </div>
+            <div class="result-actions" style="margin-top: 15px;">
+                <button class="btn-tuning" onclick="copyResult()">Скопировать текст</button>
+                <button class="btn-tuning" onclick="exportAsImage()">Скачать открытку</button>
+            </div>
+            
+            <!-- История версий -->
+            <div class="versions-section" id="versions-container" style="display: none;">
+                <div class="versions-title">Предыдущие версии:</div>
+                <div id="versions-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Скрытый блок для рендеринга открытки -->
+<div id="export-card">
+    <div class="export-text" id="export-text-content"></div>
+    <div class="export-logo">METAPHOR</div>
+</div>
+
+<script>
+    let currentText = "";
+    let textHistory = [];
+
+    function selectCard(cardElement) {
+        const grid = cardElement.parentElement;
+        grid.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+        cardElement.classList.add('active');
+    }
+
+    async function generateText(modifier = "") {
+        const resultText = document.getElementById('result-text');
+        const phoneMockup = document.getElementById('phone-mockup');
+        
+        phoneMockup.style.display = 'block';
+        resultText.innerText = "Генерируем...";
+
+        const active1 = document.querySelector('#group-1 .card.active .card-title').innerText;
+        const active2 = document.querySelector('#group-2 .card.active .card-title').innerText;
+        const active3 = document.querySelector('#group-3 .card.active .card-title').innerText;
+
+        const payload = {
+            step1: active1,
+            step2: active2 + (modifier ? ` [Модификация: ${modifier}]` : ""),
+            step3: "Тон: " + active3
+        };
+
+        try {
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            
+            if (currentText) {
+                textHistory.unshift(currentText);
+                updateVersionsUI();
+            }
+
+            currentText = data.text;
+            resultText.innerText = currentText;
+        } catch (error) {
+            resultText.innerText = "Слова потерялись в пути. Попробуйте еще раз.";
+        }
+    }
+
+    function tuneText(mod) { 
+        generateText(mod); 
+    }
+
+    function updateVersionsUI() {
+        const container = document.getElementById('versions-container');
+        const list = document.getElementById('versions-list');
+        list.innerHTML = "";
+        
+        if (textHistory.length > 0) {
+            container.style.display = 'block';
+            textHistory.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'version-item';
+                div.innerText = item.length > 60 ? item.substring(0, 60) + '...' : item;
+                div.onclick = () => {
+                    currentText = item;
+                    document.getElementById('result-text').innerText = currentText;
+                };
+                list.appendChild(div);
+            });
+        }
+    }
+
+    function copyResult() {
+        navigator.clipboard.writeText(currentText).then(() => {
+            alert('Текст скопирован в буфер обмена');
+        });
+    }
+
+    function exportAsImage() {
+        const exportCard = document.getElementById('export-card');
+        document.getElementById('export-text-content').innerText = currentText;
+        exportCard.style.display = 'flex';
+        
+        html2canvas(exportCard, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'metaphor-card.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            exportCard.style.display = 'none';
+        });
+    }
+</script>
+</body>
+</html>
