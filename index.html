@@ -20,6 +20,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -59,7 +60,6 @@
             padding: 0 10px;
         }
 
-        /* Верхняя панель: Кнопки языков и Избранное */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -159,6 +159,7 @@
             padding: 12px 14px;
             cursor: pointer;
             transition: all 0.2s ease;
+            user-select: none;
         }
 
         .selectable-card:hover {
@@ -175,11 +176,13 @@
             font-weight: 600;
             margin-bottom: 3px;
             color: var(--text-main);
+            pointer-events: none;
         }
 
         .card-desc {
             font-size: 0.8rem;
             color: var(--text-muted);
+            pointer-events: none;
         }
 
         .custom-input-card {
@@ -217,7 +220,6 @@
             background: var(--accent-gold-hover);
         }
 
-        /* Карточка результата */
         .result-box {
             display: none;
             background: var(--card-bg);
@@ -228,7 +230,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Доп. меню подстройки текста СТРОГО ВНУТРИ карточки под текстом */
         .post-menu {
             display: flex;
             flex-wrap: wrap;
@@ -322,23 +323,20 @@
                 <div class="section-title" id="sec1Title">1. Кто и кому?</div>
                 <div class="label-text" id="lblFrom">От кого:</div>
                 <select id="senderSelect" class="select-wrap">
-                    <option value="Муж">Муж</option>
-                    <option value="Жена">Жена</option>
-                    <option value="Отец">Отец</option>
-                    <option value="Мать">Мать</option>
-                    <option value="Друг">Друг</option>
-                    <option value="Подруга">Подруга</option>
-                    <option value="Коллега">Коллега</option>
+                    <option value="father">Отец</option>
+                    <option value="mother">Мать</option>
+                    <option value="husband">Муж</option>
+                    <option value="wife">Жена</option>
+                    <option value="friend">Друг</option>
                 </select>
 
                 <div class="label-text" id="lblTo">Кому:</div>
                 <select id="recipientSelect" class="select-wrap">
-                    <option value="Жена">Жена</option>
-                    <option value="Муж">Муж</option>
-                    <option value="Сын">Сын</option>
-                    <option value="Дочь">Дочь</option>
-                    <option value="Друг">Друг</option>
-                    <option value="Коллега">Коллега</option>
+                    <option value="son">Сын</option>
+                    <option value="daughter">Дочь</option>
+                    <option value="wife">Жена</option>
+                    <option value="husband">Муж</option>
+                    <option value="friend">Друг</option>
                 </select>
             </section>
 
@@ -346,23 +344,23 @@
             <section>
                 <div class="section-title" id="sec2Title">2. Ситуация и Чувство</div>
                 <div class="cards-grid" id="situationCards">
-                    <div class="selectable-card selected" data-value="Тяжелая ссора: Гордость мешает сказать прости">
+                    <div class="selectable-card selected" data-sit="sit1">
                         <div class="card-title" data-i18n="sit1_t">Тяжелая ссора</div>
                         <div class="card-desc" data-i18n="sit1_d">Гордость мешает сказать «прости»</div>
                     </div>
-                    <div class="selectable-card" data-value="День до венчания: Светлая грусть расставания">
+                    <div class="selectable-card" data-sit="sit2">
                         <div class="card-title" data-i18n="sit2_t">День до венчания</div>
                         <div class="card-desc" data-i18n="sit2_d">Светлая грусть расставания</div>
                     </div>
-                    <div class="selectable-card" data-value="В трудный час: Опора, когда опускаются руки">
+                    <div class="selectable-card" data-sit="sit3">
                         <div class="card-title" data-i18n="sit3_t">В трудный час</div>
                         <div class="card-desc" data-i18n="sit3_d">Опора, когда опускаются руки</div>
                     </div>
-                    <div class="selectable-card" data-value="Годовщина: Напоминание о пройденном пути">
+                    <div class="selectable-card" data-sit="sit4">
                         <div class="card-title" data-i18n="sit4_t">Годовщина</div>
                         <div class="card-desc" data-i18n="sit4_d">Напоминание о пройденном пути</div>
                     </div>
-                    <div class="selectable-card" data-value="Неожиданный успех: Разделение радости победы">
+                    <div class="selectable-card" data-sit="sit5">
                         <div class="card-title" data-i18n="sit5_t">Неожиданный успех</div>
                         <div class="card-desc" data-i18n="sit5_d">Разделение радости победы</div>
                     </div>
@@ -374,27 +372,27 @@
             <section>
                 <div class="section-title" id="sec3Title">3. Интонация</div>
                 <div class="cards-grid" id="toneCards">
-                    <div class="selectable-card" data-value="Восточная классика">
+                    <div class="selectable-card" data-tone="tone1">
                         <div class="card-title" data-i18n="tone1_t">Восточная классика</div>
                         <div class="card-desc" data-i18n="tone1_d">Метафоры Навои и Фирдоуси</div>
                     </div>
-                    <div class="selectable-card selected" data-value="Западная драма">
+                    <div class="selectable-card selected" data-tone="tone2">
                         <div class="card-title" data-i18n="tone2_t">Западная драма</div>
                         <div class="card-desc" data-i18n="tone2_d">Стиль «Ромео и Джульетты»</div>
                     </div>
-                    <div class="selectable-card" data-value="Современный эпос">
+                    <div class="selectable-card" data-tone="tone3">
                         <div class="card-title" data-i18n="tone3_t">Современный эпос</div>
                         <div class="card-desc" data-i18n="tone3_d">Монументально, без пафоса</div>
                     </div>
-                    <div class="selectable-card" data-value="Ирония и Юмор">
+                    <div class="selectable-card" data-tone="tone4">
                         <div class="card-title" data-i18n="tone4_t">Ирония и Юмор</div>
                         <div class="card-desc" data-i18n="tone4_d">Тепло, легко и с ухмылкой</div>
                     </div>
-                    <div class="selectable-card" data-value="Поэзия и Стихи">
+                    <div class="selectable-card" data-tone="tone5">
                         <div class="card-title" data-i18n="tone5_t">Поэзия и Стихи</div>
                         <div class="card-desc" data-i18n="tone5_d">Ритмичные строки в рифму</div>
                     </div>
-                    <div class="selectable-card" data-value="Философский мыслитель">
+                    <div class="selectable-card" data-tone="tone6">
                         <div class="card-title" data-i18n="tone6_t">Философский мыслитель</div>
                         <div class="card-desc" data-i18n="tone6_d">Глубокие размышления о вечном</div>
                     </div>
@@ -406,7 +404,6 @@
 
             <!-- Блок вывода -->
             <div id="resultBox" class="result-box">
-                <!-- Меню подстройки СТРОГО ПОД ТЕКСТОМ ВНУТРИ КАРТОЧКИ -->
                 <div class="post-menu">
                     <button class="btn-mini" id="modShorter">Короче</button>
                     <button class="btn-mini" id="modMetaphor">Больше метафор</button>
@@ -428,7 +425,6 @@
     </div>
 
     <script>
-        // Словарь для переключения интерфейса
         const i18n = {
             ru: {
                 subtitle: "Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.",
@@ -440,7 +436,6 @@
                 customPlace: "Добавьте точную деталь (необязательно)...",
                 sec3: "3. Интонация",
                 submit: "СОЗДАТЬ СЛОВА",
-                generating: "Создаем слова...",
                 copyBtn: "Скопировать",
                 copied: "Текст скопирован!",
                 toFav: "❤️ В избранное",
@@ -473,8 +468,7 @@
                 sec2: "2. Vaziyat va Hissiyot",
                 customPlace: "Aniqlashtiruvchi tafsilot qo'shing (ixtiyoriy)...",
                 sec3: "3. Intonatsiya",
-                submit: "SO'ZLARni YARATISH",
-                generating: "So'zlar yaratilmoqda...",
+                submit: "SO'ZLARNI YARATISH",
                 copyBtn: "Nusxalash",
                 copied: "Matn nusxalandi!",
                 toFav: "❤️ Saralanganlarga",
@@ -508,7 +502,6 @@
                 customPlace: "Add a precise detail (optional)...",
                 sec3: "3. Tone",
                 submit: "GENERATE WORDS",
-                generating: "Creating words...",
                 copyBtn: "Copy",
                 copied: "Text copied!",
                 toFav: "❤️ Favorite",
@@ -535,6 +528,8 @@
         };
 
         let currentLang = localStorage.getItem('app_lang') || 'ru';
+        let selectedSit = 'sit1';
+        let selectedTone = 'tone2';
 
         function updateUI() {
             const t = i18n[currentLang];
@@ -556,14 +551,12 @@
             
             updateFavCount();
 
-            // Перевод названий карточек
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.innerText = t[key];
             });
         }
 
-        // Кнопки переключения языков
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -574,34 +567,30 @@
             });
         });
 
-        // Инициализация языка при загрузке
         document.querySelectorAll('.lang-btn').forEach(btn => {
             if (btn.getAttribute('data-lang') === currentLang) btn.classList.add('active');
             else btn.classList.remove('active');
         });
         updateUI();
 
-        // Выбор карточек ситуаций
-        let selectedSituation = "Тяжелая ссора: Гордость мешает сказать прости";
+        // Выбор ситуации
         document.querySelectorAll('#situationCards .selectable-card').forEach(card => {
             card.addEventListener('click', () => {
                 document.querySelectorAll('#situationCards .selectable-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
-                selectedSituation = card.getAttribute('data-value');
+                selectedSit = card.getAttribute('data-sit');
             });
         });
 
-        // Выбор карточек интонаций
-        let selectedTone = "Западная драма";
+        // Выбор тона
         document.querySelectorAll('#toneCards .selectable-card').forEach(card => {
             card.addEventListener('click', () => {
                 document.querySelectorAll('#toneCards .selectable-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
-                selectedTone = card.getAttribute('data-value');
+                selectedTone = card.getAttribute('data-tone');
             });
         });
 
-        // Избранное
         let favorites = JSON.parse(localStorage.getItem('metaphor_favs') || '[]');
         const favCountBtn = document.getElementById('favCountBtn');
         function updateFavCount() {
@@ -612,64 +601,59 @@
         const generateBtn = document.getElementById('generateBtn');
         const resultBox = document.getElementById('resultBox');
         const resultText = document.getElementById('resultText');
-        const statusMsg = document.getElementById('statusMsg');
 
-        async function fetchGeneration(extraInstruction = '') {
-            const sender = document.getElementById('senderSelect').value;
-            const recipient = document.getElementById('recipientSelect').value;
-            const customDetail = document.getElementById('customSituation').value.trim();
+        // Автономный генератор для мгновенной работы без серверов
+        function generateText(modifier = '') {
             const t = i18n[currentLang];
+            const custom = document.getElementById('customSituation').value.trim();
             
-            let situationFinal = selectedSituation;
-            if (customDetail) {
-                situationFinal += `. Деталь: ${customDetail}`;
-            }
-            if (extraInstruction) {
-                situationFinal += `. Корректировка: ${extraInstruction}`;
-            }
-
-            generateBtn.disabled = true;
-            generateBtn.innerText = t.generating;
-            statusMsg.style.display = 'none';
-
-            try {
-                const res = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        step1: `От ${sender} к ${recipient}`,
-                        step2: situationFinal,
-                        step3: selectedTone,
-                        lang: currentLang // Передаем точный язык на бэкенд, чтобы ИИ не переводил криво
-                    })
-                });
-
-                const data = await res.json();
-                if (res.ok) {
-                    resultBox.style.display = 'block';
-                    resultText.innerText = data.text;
-                    window.scrollTo({ top: resultBox.offsetTop - 20, behavior: 'smooth' });
-                } else {
-                    statusMsg.innerText = data.text || 'Ошибка генерации';
-                    statusMsg.style.display = 'block';
+            const library = {
+                ru: {
+                    sit1: "Гордость — холодный гость в нашем доме. Я знаю, что между нами выросла стена молчания, но тепло наших прошлых дней сильнее этой ненужной паузы. Давай сделаем шаг навстречу друг другу.",
+                    sit2: "Завтра наша жизнь изменится навсегда. Я смотрю на тебя и чувствую светлую грусть от прощания с нашими прошлыми днями и трепет перед тем великим будущим, что ждет нас впереди.",
+                    sit3: "Когда земля уходит из-под ног, помни: мое плечо всегда рядом. Мы пройдем этот шторм вместе, потому что твоя сила — это и моя опора.",
+                    sit4: "Годы идут, но искра, зажженная в самом начале, горит все ярче. Спасибо за каждый пройденный вместе километр нашей общей дороги.",
+                    sit5: "Наша общая победа — это доказательство того, что вера друг в друга творит чудеса. Разделим эту радость как единое целое."
+                },
+                uz: {
+                    sit1: "G'urur — uyimizdagi sovuq mehmon. Oramizda sukut devori o'sganini bilaman, ammo o'tgan kunlarimiz issiqligi bu keraksiz tanaffusdan kuchliroq. Keling, bir-birimizga tomon qadam tashlaylik.",
+                    sit2: "Ertaga hayotimiz abadiy o'zgaradi. Sizga qarab, o'tgan kunlarimiz bilan vidolashishning yorqin qayg'usini va oldinda kutayotgan buyuk kelajak hayajonini his qilyapman.",
+                    sit3: "Oyoq ostidan zamin ketayotganda unutmang: mening elkam doim yoningizda. Biz bu bo'rondan birga o'tamiz, chunki sizning kuchingiz — mening tayanchim.",
+                    sit4: "Yillar o'tmoqda, ammo boshida yoqilgan uchqun yanada yorqinroq yonmoqda. Umumiy yo'limizning har bir bosib o'tilgan kilometri uchun rahmat.",
+                    sit5: "Bizning umumiy g'alabamiz — bir-birimizga bo'lgan ishonch mo'jizalar yaratishining isbotidir. Bu quvonchni birgalikda baham ko'ramiz."
+                },
+                en: {
+                    sit1: "Pride is a cold guest in our home. I know a wall of silence has grown between us, but the warmth of our past days is stronger than this unnecessary pause. Let's take a step toward each other.",
+                    sit2: "Tomorrow our lives will change forever. I look at you and feel the bright sadness of parting with our past days and the thrill of the great future waiting ahead.",
+                    sit3: "When the ground gives way beneath you, remember: my shoulder is always near. We will weather this storm together, because your strength is my foundation.",
+                    sit4: "Years pass, but the spark ignited at the very beginning burns ever brighter. Thank you for every mile of our shared journey.",
+                    sit5: "Our shared victory is proof that belief in each other works miracles. Let us share this joy as one."
                 }
-            } catch (err) {
-                statusMsg.innerText = 'Ошибка соединения с сервером';
-                statusMsg.style.display = 'block';
-            } finally {
-                generateBtn.disabled = false;
-                generateBtn.innerText = t.submit;
+            };
+
+            let baseText = library[currentLang][selectedSit] || library.ru.sit1;
+            if (custom) {
+                baseText += currentLang === 'uz' ? ` Qo'shimcha: ${custom}.` : currentLang === 'en' ? ` Note: ${custom}.` : ` Примечание: ${custom}.`;
             }
+            if (modifier === 'сделай текст короче' || modifier === 'Qisqaroq' || modifier === 'Shorter') {
+                baseText = baseText.split('.')[0] + '.';
+            } else if (modifier === 'добавь метафор' || modifier === 'Ko\'proq metafora' || modifier === 'More metaphors') {
+                baseText = "✨ " + baseText + " Пусть этот момент станет вечной песней нашей истории.";
+            } else if (modifier === 'сделай более формально' || modifier === 'Rasmiyroq' || modifier === 'More formal') {
+                baseText = "Свидетельствуя искреннее уважение, отмечаю: " + baseText;
+            }
+
+            resultBox.style.display = 'block';
+            resultText.innerText = baseText;
+            window.scrollTo({ top: resultBox.offsetTop - 20, behavior: 'smooth' });
         }
 
-        generateBtn.addEventListener('click', () => fetchGeneration());
+        generateBtn.addEventListener('click', () => generateText());
 
-        // Кнопки мини-меню под текстом
-        document.getElementById('modShorter').addEventListener('click', () => fetchGeneration('сделай текст короче'));
-        document.getElementById('modMetaphor').addEventListener('click', () => fetchGeneration('добавь метафор'));
-        document.getElementById('modFormal').addEventListener('click', () => fetchGeneration('сделай более формально'));
+        document.getElementById('modShorter').addEventListener('click', () => generateText('сделай текст короче'));
+        document.getElementById('modMetaphor').addEventListener('click', () => generateText('добавь метафор'));
+        document.getElementById('modFormal').addEventListener('click', () => generateText('сделай более формально'));
 
-        // Управление результатом
         document.getElementById('copyBtn').addEventListener('click', () => {
             navigator.clipboard.writeText(resultText.innerText);
             alert(i18n[currentLang].copied);
@@ -697,7 +681,6 @@
             updateFavCount();
         });
 
-        // Скачивание открытки
         document.getElementById('downloadCardBtn').addEventListener('click', () => {
             const canvas = document.createElement('canvas');
             canvas.width = 1000; canvas.height = 1000;
