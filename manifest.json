@@ -1,7 +1,21 @@
 {
-  "name": "Metaphor",
   "short_name": "Metaphor",
-  "display": "standalone",
+  "name": "Metaphor — Искусство выражать чувства",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3898/3898082.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3898/3898082.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
   "background_color": "#141415",
-  "theme_color": "#141415"
+  "theme_color": "#141415",
+  "display": "standalone",
+  "orientation": "portrait"
 }
