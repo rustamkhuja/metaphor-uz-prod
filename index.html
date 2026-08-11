@@ -3,1111 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metaphor — Искусство выражать чувства</title>
-    <!-- PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#141415">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+    <title>Metaphor — Искренние и точные слова</title>
     <style>
         :root {
-            --bg-color: #141415;
-            --surface: #1c1c1e;
-            --accent: #d1a766;
-            --text-main: #f0ebe1;
-            --text-muted: #8e8e93;
-            --border: #2c2c2e;
-            --tg-color: #29a0da;
-            --heart-color: #e25555;
-            --audio-color: #9b51e0;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            padding: 0 20px; 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        .container { max-width: 600px; margin: 40px auto 100px; }
-        
-        .header-box {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .lang-switcher {
-            display: flex;
-            gap: 4px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 3px;
-        }
-
-        .lang-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 4px 10px;
-            font-size: 0.75rem;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-
-        .lang-btn.active {
-            background: var(--accent);
-            color: var(--bg-color);
-        }
-
-        h1 { 
-            font-family: 'Playfair Display', serif; 
-            font-size: 32px; 
-            color: var(--text-main); 
-            margin-bottom: 8px; 
-            letter-spacing: 2px;
-        }
-
-        .subtitle { 
-            color: var(--text-muted); 
-            font-size: 0.9rem; 
-            margin-bottom: 16px; 
-        }
-
-        .fav-header-btn {
-            background: transparent;
-            border: 1px solid var(--border);
+        body {
+            background-color: var(--bg-color);
             color: var(--text-main);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .fav-header-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .section-title { 
-            font-family: 'Playfair Display', serif; 
-            color: var(--accent); 
-            font-size: 1.1rem; 
-            margin-bottom: 15px; 
-            margin-top: 30px; 
-        }
-
-        .dropdown-group {
+            min-height: 100vh;
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .dropdown-container { flex: 1; }
-
-        .dropdown-label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        @media (max-width: 600px) {
-            .dropdown-group { flex-direction: column; gap: 0; }
-        }
-
-        .custom-select, .custom-input {
-            width: 100%;
-            padding: 16px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            border-radius: 4px;
-            transition: 0.3s;
-            margin-bottom: 12px;
-        }
-
-        .custom-select {
-            cursor: pointer;
-            appearance: none; 
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d1a766%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px top 50%;
-            background-size: 12px auto;
-        }
-
-        .custom-input::placeholder { color: var(--text-muted); opacity: 0.6; }
-
-        .custom-select:focus, .custom-input:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 1px var(--accent);
-        }
-
-        .custom-select option { background: var(--surface); color: var(--text-main); }
-
-        .cards-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; 
-            margin-bottom: 12px; 
-        }
-
-        @media (max-width: 600px) {
-            .cards-grid { grid-template-columns: 1fr; }
-        }
-
-        .card { 
-            background: var(--surface); 
-            border: 1px solid var(--border); 
-            padding: 16px; 
-            cursor: pointer; 
-            border-radius: 4px; 
-            transition: 0.3s; 
-        }
-
-        .card:hover { border-color: var(--accent); }
-        .card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-
-        .card-title { 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            margin-bottom: 6px; 
-            color: var(--text-main); 
-        }
-
-        .card-desc { 
-            font-size: 0.75rem; 
-            color: var(--text-muted); 
-            line-height: 1.4; 
-        }
-
-        .btn-main { 
-            background: transparent; 
-            color: var(--accent); 
-            border: 1px solid var(--accent); 
-            padding: 16px 24px; 
-            cursor: pointer; 
-            width: 100%; 
-            margin-top: 30px; 
-            font-weight: 600; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            transition: 0.3s; 
-        }
-
-        .btn-main:hover { 
-            background: var(--accent); 
-            color: var(--bg-color); 
-        }
-
-        .phone-mockup {
-            display: none;
-            margin-top: 40px;
-            background: #000;
-            border: 12px solid #2c2c2e;
-            border-radius: 36px;
-            padding: 30px 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            position: relative;
-        }
-        .phone-mockup::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 14px;
-            background: #2c2c2e;
-            border-radius: 10px;
-        }
-
-        #result-section { 
-            margin-top: 10px; 
-            padding: 20px; 
-            background: var(--surface); 
-            border-left: 4px solid var(--accent); 
-            border-radius: 4px; 
-        }
-
-        #result-text { 
-            font-family: 'Cormorant Garamond', serif; 
-            font-size: 22px; 
-            line-height: 1.6; 
-            color: var(--text-main); 
-            margin-bottom: 20px; 
-            white-space: pre-wrap; 
-            min-height: 80px;
-        }
-
-        .result-actions { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-            margin-top: 15px; 
-            justify-content: center; 
-        }
-        
-        .btn-tuning { 
-            background: transparent; 
-            border: 1px solid var(--border); 
-            color: var(--text-muted); 
-            padding: 8px 16px; 
-            font-size: 0.8rem; 
-            cursor: pointer; 
-            border-radius: 20px; 
-            transition: 0.3s; 
-            display: inline-flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-        }
-        .btn-tuning:hover { border-color: var(--accent); color: var(--accent); }
-
-        .btn-audio { border-color: var(--audio-color); color: var(--audio-color); }
-        .btn-audio.playing { background: var(--audio-color); color: #fff; }
-        .btn-audio:hover { opacity: 0.9; }
-
-        .btn-tg { border-color: var(--tg-color); color: var(--tg-color); }
-        .btn-tg:hover { background: var(--tg-color); color: #fff; }
-
-        .btn-fav { border-color: var(--heart-color); color: var(--heart-color); }
-        .btn-fav.active { background: var(--heart-color); color: #fff; }
-        .btn-fav:hover { opacity: 0.9; }
-
-        .versions-section {
-            margin-top: 25px;
-            border-top: 1px solid var(--border);
-            padding-top: 15px;
-        }
-        .versions-title {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-        .version-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .version-item:hover {
-            color: var(--text-main);
-            border-color: var(--accent);
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
         }
-        .modal-overlay.active { display: flex; }
 
-        .modal-body {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            max-width: 480px;
+        header {
             width: 100%;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
+            max-width: 600px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
         }
-        .modal-header h3 {
-            font-family: 'Playfair Display', serif;
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .lang-select {
+            background: var(--card-bg);
             color: var(--text-main);
-            font-size: 1.2rem;
-        }
-        .modal-close {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .modal-close:hover { color: var(--text-main); }
-
-        .theme-selector { display: flex; gap: 8px; }
-        .theme-btn {
-            flex: 1;
-            padding: 10px 8px;
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .theme-btn.active, .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-        .preview-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0,0,0,0.4);
-            padding: 15px;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
             border-radius: 8px;
+            outline: none;
+            cursor: pointer;
         }
 
-        .card-preview-box {
+        main {
             width: 100%;
-            aspect-ratio: 1 / 1;
-            padding: 30px;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-family: 'Cormorant Garamond', serif;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            border-radius: 4px;
+            gap: 20px;
         }
 
-        .preview-text {
-            font-size: 18px;
-            line-height: 1.5;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+        }
+
+        button.btn-primary {
+            background: var(--accent-color);
+            color: #000;
+            font-weight: 600;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 10px;
+        }
+
+        button.btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-card {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .result-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
             margin-bottom: 20px;
             white-space: pre-wrap;
-            max-height: 240px;
-            overflow-y: auto;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .preview-text::-webkit-scrollbar { display: none; }
-
-        .preview-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 16px;
-            letter-spacing: 3px;
-            font-weight: 600;
         }
 
-        .fav-list { display: flex; flex-direction: column; gap: 12px; }
-        .fav-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 14px;
+        .action-buttons {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
         }
-        .fav-item-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            line-height: 1.4;
+
+        .btn-action {
+            background: transparent;
+            border: 1px solid var(--border-color);
             color: var(--text-main);
-            white-space: pre-wrap;
-        }
-        .fav-item-actions {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
             display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-
-        .theme-obsidian { background: #141415 !important; color: #f0ebe1 !important; border: 12px solid #d1a766 !important; }
-        .theme-obsidian .preview-logo, .theme-obsidian .export-logo { color: #d1a766 !important; }
-
-        .theme-cream { background: #fdfbf7 !important; color: #2b2621 !important; border: 12px solid #8c7355 !important; }
-        .theme-cream .preview-logo, .theme-cream .export-logo { color: #8c7355 !important; }
-
-        .theme-emerald { background: #091a13 !important; color: #e3efe9 !important; border: 12px solid #529471 !important; }
-        .theme-emerald .preview-logo, .theme-emerald .export-logo { color: #529471 !important; }
-
-        #export-card {
-            display: none;
-            padding: 60px;
-            width: 800px;
-            min-height: 800px;
-            font-family: 'Cormorant Garamond', serif;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            position: absolute;
-            left: -9999px;
-            box-sizing: border-box;
+            gap: 6px;
+            transition: background 0.2s;
         }
 
-        .export-text { font-size: 38px; line-height: 1.5; margin-bottom: 40px; white-space: pre-wrap; }
-        .export-logo { font-family: 'Playfair Display', serif; font-size: 24px; letter-spacing: 4px; font-weight: 600; }
+        .btn-action:hover {
+            background: var(--border-color);
+        }
+
+        .status-msg {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header-box">
-        <div class="top-bar">
-            <div class="lang-switcher">
-                <button class="lang-btn active" onclick="changeLang('ru', this)">RU</button>
-                <button class="lang-btn" onclick="changeLang('uz', this)">UZ</button>
-                <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
-            </div>
-            <button class="fav-header-btn" onclick="openFavoritesModal()">
-                ❤️ <span id="lbl-fav-header">Избранное</span> (<span id="fav-count">0</span>)
-            </button>
+    <header>
+        <div class="logo">METAPHOR</div>
+        <select id="langSelect" class="lang-select">
+            <option value="ru">Русский</option>
+            <option value="uz">O'zbekcha</option>
+            <option value="en">English</option>
+        </select>
+    </header>
+
+    <main>
+        <div class="form-group">
+            <label for="step1">От кого и кому:</label>
+            <input type="text" id="step1" placeholder="Например: От друга другу, от сына маме">
         </div>
-        <h1>Metaphor</h1>
-        <div class="subtitle" id="lbl-subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
-    </div>
-    
-    <div class="section-title" id="sec-1">1. Кто и кому?</div>
-    <div class="dropdown-group">
-        <div class="dropdown-container">
-            <label class="dropdown-label" id="lbl-sender">От кого:</label>
-            <select id="sender-select" class="custom-select" onchange="updateRecipientOptions()"></select>
+
+        <div class="form-group">
+            <label for="step2">Ситуация / Повод:</label>
+            <input type="text" id="step2" placeholder="Например: День рождения, поддержка в трудную минуту">
         </div>
-        <div class="dropdown-container">
-            <label class="dropdown-label" id="lbl-recipient">Кому:</label>
-            <select id="recipient-select" class="custom-select"></select>
+
+        <div class="form-group">
+            <label for="step3">Тон / Тональность:</label>
+            <select id="step3">
+                <option value="Искренний и теплый">Искренний и теплый</option>
+                <option value="Восточная классика">Восточная классика</option>
+                <option value="Западная драма">Западная драма</option>
+                <option value="Современный эпос">Современный эпос</option>
+                <option value="Легкий и с юмором">Легкий и с юмором</option>
+            </select>
         </div>
-    </div>
 
-    <div class="section-title" id="sec-2">2. Ситуация и Чувство</div>
-    <div class="cards-grid" id="group-2"></div>
-    
-    <input type="text" id="custom-detail" class="custom-input" placeholder="Добавьте точную деталь (необязательно, напр: застряли в лифте, не виделись 5 лет...)">
+        <button id="generateBtn" class="btn-primary">Сгенерировать текст</button>
+        <div id="statusMsg" class="status-msg"></div>
 
-    <div class="section-title" id="sec-3">3. Интонация</div>
-    <div class="cards-grid" id="group-3"></div>
-
-    <button class="btn-main" id="btn-generate" onclick="generateText()">Создать слова</button>
-
-    <div class="phone-mockup" id="phone-mockup">
-        <div id="result-section">
-            <div id="result-text"></div>
-            <div class="result-actions" id="tuning-bar">
-                <button class="btn-tuning" id="btn-shorter" onclick="tuneText('Сделай короче')">Короче</button>
-                <button class="btn-tuning" id="btn-more-metaphors" onclick="tuneText('Добавь больше метафор')">Метафоры</button>
-                <button class="btn-tuning" id="btn-more-formal" onclick="tuneText('Смени стиль на более формальный')">Более формально</button>
-            </div>
-            <div class="result-actions" style="margin-top: 15px;">
-                <button class="btn-tuning btn-audio" id="btn-speech" onclick="toggleSpeech()">🔊 Прослушать</button>
-                <button class="btn-tuning btn-fav" id="btn-fav" onclick="toggleFavoriteCurrent()">❤️ В избранное</button>
-                <button class="btn-tuning btn-tg" onclick="shareTelegram()">В Telegram</button>
-                <button class="btn-tuning" id="btn-copy" onclick="copyResult()">Скопировать</button>
-                <button class="btn-tuning" id="btn-card" onclick="openCardModal()">Скачать открытку</button>
-            </div>
+        <div id="resultCard" class="result-card">
+            <div id="resultText" class="result-text"></div>
             
-            <div class="versions-section" id="versions-container" style="display: none;">
-                <div class="versions-title" id="lbl-prev-versions">Предыдущие версии:</div>
-                <div id="versions-list"></div>
+            <div class="action-buttons">
+                <button id="copyBtn" class="btn-action">📋 Копировать</button>
+                <button id="listenBtn" class="btn-action">🔊 Озвучить</button>
+                <button id="downloadBtn" class="btn-action">🎨 Download Card</button>
+                <button id="shareTelegramBtn" class="btn-action">✈️ В Telegram</button>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<!-- Модальное окно открытки -->
-<div class="modal-overlay" id="card-modal">
-    <div class="modal-body">
-        <div class="modal-header">
-            <h3 id="lbl-card-modal-title">Создание открытки</h3>
-            <button class="modal-close" onclick="closeCardModal()">&times;</button>
-        </div>
-        <div class="theme-selector">
-            <button class="theme-btn active" onclick="setCardTheme('obsidian', this)">Obsidian Gold</button>
-            <button class="theme-btn" onclick="setCardTheme('cream', this)">Warm Cream</button>
-            <button class="theme-btn" onclick="setCardTheme('emerald', this)">Deep Emerald</button>
-        </div>
-        <div class="preview-wrapper">
-            <div id="modal-card-preview" class="card-preview-box theme-obsidian">
-                <div class="preview-text" id="modal-preview-text"></div>
-                <div class="preview-logo">METAPHOR</div>
-            </div>
-        </div>
-        <button class="btn-main" style="margin-top: 0;" id="btn-download-png" onclick="downloadCardImage()">Скачать PNG</button>
-    </div>
-</div>
-
-<!-- Модальное окно Избранное -->
-<div class="modal-overlay" id="fav-modal">
-    <div class="modal-body">
-        <div class="modal-header">
-            <h3 id="lbl-fav-modal-title">Сохраненные метафоры</h3>
-            <button class="modal-close" onclick="closeFavoritesModal()">&times;</button>
-        </div>
-        <div class="fav-list" id="fav-list-container"></div>
-    </div>
-</div>
-
-<!-- Скрытый холст -->
-<div id="export-card" class="theme-obsidian">
-    <div class="export-text" id="export-text-content"></div>
-    <div class="export-logo">METAPHOR</div>
-</div>
-
-<script>
-    let currentLang = 'ru';
-
-    const translations = {
-        ru: {
-            subtitle: "Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.",
-            favHeader: "Избранное",
-            sec1: "1. Кто и кому?",
-            sec2: "2. Ситуация и Чувство",
-            sec3: "3. Интонация",
-            lblSender: "От кого:",
-            lblRecipient: "Кому:",
-            placeholderDetail: "Добавьте точную деталь (необязательно, напр: застряли в лифте, не виделись 5 лет...)",
-            btnGenerate: "Создать слова",
-            btnShorter: "Короче",
-            btnMoreMetaphors: "Метафоры",
-            btnMoreFormal: "Более формально",
-            btnListen: "🔊 Прослушать",
-            btnStopListen: "⏹ Остановить",
-            btnFavAdd: "❤️ В избранное",
-            btnFavRemove: "❤️ В избранном",
-            btnCopy: "Скопировать",
-            btnCard: "Скачать открытку",
-            lblPrevVersions: "Предыдущие версии:",
-            lblCardModalTitle: "Создание открытки",
-            btnDownloadPng: "Скачать PNG",
-            lblFavModalTitle: "Сохраненные метафоры",
-            emptyFav: "У вас пока нет сохраненных метафор",
-            roles: ["Парень", "Девушка", "Муж", "Жена", "Отец", "Мать", "Сын", "Дочь", "Друг", "Подруга", "Коллега", "Наставник", "Команда"],
-            group2: [
-                { title: "Тяжелая ссора", desc: "Гордость мешает сказать «прости»" },
-                { title: "День до венчания", desc: "Светлая грусть расставания" },
-                { title: "В трудный час", desc: "Опора, когда опускаются руки" },
-                { title: "Выгорание на работе", desc: "Слова поддержки и веры в силы" },
-                { title: "Годовщина", desc: "Напоминание о пройденном пути" },
-                { title: "Неожиданный успех", desc: "Разделение радости победы" }
-            ],
-            group3: [
-                { title: "Восточная классика", desc: "Метафоры Навои и Фирдоуси" },
-                { title: "Западная драма", desc: "Стиль «Ромео и Джульетты»" },
-                { title: "Современный эпос", desc: "Монументально, без пафоса" },
-                { title: "Ирония и Юмор", desc: "Тепло, легко и с ухмылкой" },
-                { title: "Поэзия и Стихи", desc: "Ритмичные строки в рифму" },
-                { title: "Философский мыслитель", desc: "Глубокие размышления о вечном" }
-            ]
-        },
-        uz: {
-            subtitle: "Yuragingizdagi izhorlar uchun eng go'zal tashbehlar va so'zlar.",
-            favHeader: "Saralanganlar",
-            sec1: "1. Kimdan va kimga?",
-            sec2: "2. Vaziyat va Tuzg'u",
-            sec3: "3. Ohang va Uslub",
-            lblSender: "Kimdan:",
-            lblRecipient: "Kimga:",
-            placeholderDetail: "Aniq tafsilot qo'shing (ixtiyoriy, masalan: 5 yil ko'rishmadik, birga liftda qolib ketdik...)",
-            btnGenerate: "Izhor Yaratish",
-            btnShorter: "Qisqaroq",
-            btnMoreMetaphors: "Ko'proq tashbeh",
-            btnMoreFormal: "Rasmiyroq",
-            btnListen: "🔊 Tinglash",
-            btnStopListen: "⏹ To'xtatish",
-            btnFavAdd: "❤️ Saqlash",
-            btnFavRemove: "❤️ Saqlangan",
-            btnCopy: "Nusxalash",
-            btnCard: "Ochiqxona yuklash",
-            lblPrevVersions: "Oldingi versiyalar:",
-            lblCardModalTitle: "Ochratka yaratish",
-            btnDownloadPng: "PNG yuklab olish",
-            lblFavModalTitle: "Saqlangan izhorlar",
-            emptyFav: "Sizda hali saqlangan izhorlar yo'q",
-            roles: ["Yigit", "Qiz", "Eri", "Xotini", "Ota", "Ona", "O'g'il", "Qiz farzand", "Do'st", "Dugona", "Hamkasb", "Ustoz", "Jamoa"],
-            group2: [
-                { title: "O'rtadagi gina", desc: "Kibr «kechiring» deyishga yo'l qo'ymaydi" },
-                { title: "To'y arafasida", desc: "Ayriliq va yangi hayot oldidagi hayajon" },
-                { title: "Og'ir damlarda", desc: "Umid va ruhiy tirak bo'luvchi so'zlar" },
-                { title: "Charchoq va tushkunlik", desc: "Ishdagi qiyinchilikda dalda berish" },
-                { title: "Yillik sana", desc: "Birga bosib o'tilgan yo'l xotirasi" },
-                { title: "Kutilmagan g'alaba", desc: "Muvaffaqiyat quvonchini baham ko'rish" }
-            ],
-            group3: [
-                { title: "Sharq mumtoz g'azali", desc: "Navoiy va Bobur merosi, baytlar" },
-                { title: "G'arbiy drama", desc: "«Romeo va Julyetta» uslubi" },
-                { title: "Zamonaviy epos", desc: "Salobatli va ta'sirchan so'zlar" },
-                { title: "Samimiy yumor", desc: "Yengil tabassum va tabassum bilan" },
-                { title: "She'riy qafas", desc: "Qofiyali va ritmli satrlar" },
-                { title: "Falsafiy teranlik", desc: "Hayot va segi haqida chuqur fikrlar" }
-            ]
-        },
-        en: {
-            subtitle: "The exact words you were looking for. Choose a situation and tone.",
-            favHeader: "Saved",
-            sec1: "1. From whom to whom?",
-            sec2: "2. Situation & Feeling",
-            sec3: "3. Tone & Style",
-            lblSender: "From:",
-            lblRecipient: "To:",
-            placeholderDetail: "Add a specific detail (optional, e.g. stuck in an elevator, haven't met in 5 years...)",
-            btnGenerate: "Craft Words",
-            btnShorter: "Shorter",
-            btnMoreMetaphors: "More Metaphors",
-            btnMoreFormal: "More Formal",
-            btnListen: "🔊 Listen",
-            btnStopListen: "⏹ Stop",
-            btnFavAdd: "❤️ Save",
-            btnFavRemove: "❤️ Saved",
-            btnCopy: "Copy",
-            btnCard: "Download Card",
-            lblPrevVersions: "Previous versions:",
-            lblCardModalTitle: "Card Constructor",
-            btnDownloadPng: "Download PNG",
-            lblFavModalTitle: "Saved Metaphors",
-            emptyFav: "No saved metaphors yet",
-            roles: ["Boyfriend", "Girlfriend", "Husband", "Wife", "Father", "Mother", "Son", "Daughter", "Friend (Male)", "Friend (Female)", "Colleague", "Mentor", "Team"],
-            group2: [
-                { title: "Heated Argument", desc: "When pride stops you from saying sorry" },
-                { title: "Eve of Wedding", desc: "Bittersweet feeling of a new chapter" },
-                { title: "Hard Times", desc: "Strong support when feeling lost" },
-                { title: "Work Burnout", desc: "Words of hope and belief in them" },
-                { title: "Anniversary", desc: "Reflecting on the journey together" },
-                { title: "Unexpected Success", desc: "Sharing pure joy of victory" }
-            ],
-            group3: [
-                { title: "Eastern Classics", desc: "Rich poetic metaphors of the East" },
-                { title: "Western Drama", desc: "Romantic 'Romeo & Juliet' style" },
-                { title: "Modern Epic", desc: "Deeply emotional, solemn tone" },
-                { title: "Warm Irony", desc: "Lighthearted, playful yet loving" },
-                { title: "Poetic Verse", desc: "Rhymed, rhythmic romantic poetic lines" },
-                { title: "Philosophical", desc: "Profound thoughts about life and soul" }
-            ]
+    <script>
+        // Универсальная функция отправки аналитики
+        async function trackEvent(payload) {
+            try {
+                await fetch('/api/track', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (e) {
+                console.error('Analytics tracking error:', e);
+            }
         }
-    };
 
-    let currentText = "";
-    let textHistory = [];
-    let typingInterval = null;
-    let selectedTheme = "obsidian";
-    let isSpeaking = false;
+        document.addEventListener('DOMContentLoaded', () => {
+            const langSelect = document.getElementById('langSelect');
+            const generateBtn = document.getElementById('generateBtn');
+            const resultCard = document.getElementById('resultCard');
+            const resultText = document.getElementById('resultText');
+            const statusMsg = document.getElementById('statusMsg');
 
-    function changeLang(lang, btnElement) {
-        currentLang = lang;
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        if (btnElement) btnElement.classList.add('active');
-        applyTranslations();
-    }
+            const copyBtn = document.getElementById('copyBtn');
+            const listenBtn = document.getElementById('listenBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const shareTelegramBtn = document.getElementById('shareTelegramBtn');
 
-    function applyTranslations() {
-        const t = translations[currentLang];
+            // Восстановление языка из localStorage
+            const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
+            langSelect.value = savedLang;
 
-        document.getElementById('lbl-subtitle').innerText = t.subtitle;
-        document.getElementById('lbl-fav-header').innerText = t.favHeader;
-        document.getElementById('sec-1').innerText = t.sec1;
-        document.getElementById('sec-2').innerText = t.sec2;
-        document.getElementById('sec-3').innerText = t.sec3;
-        document.getElementById('lbl-sender').innerText = t.lblSender;
-        document.getElementById('lbl-recipient').innerText = t.lblRecipient;
-        document.getElementById('custom-detail').placeholder = t.placeholderDetail;
-        document.getElementById('btn-generate').innerText = t.btnGenerate;
-        document.getElementById('btn-shorter').innerText = t.btnShorter;
-        document.getElementById('btn-more-metaphors').innerText = t.btnMoreMetaphors;
-        document.getElementById('btn-more-formal').innerText = t.btnMoreFormal;
-        document.getElementById('btn-copy').innerText = t.btnCopy;
-        document.getElementById('btn-card').innerText = t.btnCard;
-        document.getElementById('lbl-prev-versions').innerText = t.lblPrevVersions;
-        document.getElementById('lbl-card-modal-title').innerText = t.lblCardModalTitle;
-        document.getElementById('btn-download-png').innerText = t.btnDownloadPng;
-        document.getElementById('lbl-fav-modal-title').innerText = t.lblFavModalTitle;
+            // 1. Фиксируем визит
+            trackEvent({
+                type: 'visit',
+                language: savedLang
+            });
 
-        renderDropdowns();
-        renderCards('group-2', t.group2);
-        renderCards('group-3', t.group3);
-        updateFavCountUI();
-        updateSpeechBtnUI();
-    }
+            // Смена языка
+            langSelect.addEventListener('change', (e) => {
+                localStorage.setItem('selectedLanguage', e.target.value);
+            });
 
-    function renderDropdowns() {
-        const roles = translations[currentLang].roles;
-        const senderSelect = document.getElementById('sender-select');
-        senderSelect.innerHTML = "";
-        
-        roles.forEach(role => {
-            const opt = document.createElement('option');
-            opt.value = role;
-            opt.textContent = role;
-            senderSelect.appendChild(opt);
-        });
+            // Генерация текста
+            generateBtn.addEventListener('click', async () => {
+                const step1 = document.getElementById('step1').value.trim();
+                const step2 = document.getElementById('step2').value.trim();
+                const step3 = document.getElementById('step3').value;
+                const lang = langSelect.value;
 
-        senderSelect.value = roles[2] || roles[0]; // Husband/Eri
-        updateRecipientOptions(roles[3] || roles[1]); // Wife/Xotini
-    }
-
-    function updateRecipientOptions(preferredRecipient = null) {
-        const roles = translations[currentLang].roles;
-        const senderSelect = document.getElementById('sender-select');
-        const recipientSelect = document.getElementById('recipient-select');
-        const selectedSender = senderSelect.value;
-        const previousRecipient = preferredRecipient || recipientSelect.value;
-
-        recipientSelect.innerHTML = "";
-
-        roles.forEach(role => {
-            if (role !== selectedSender) {
-                const opt = document.createElement('option');
-                opt.value = role;
-                opt.textContent = role;
-                if (role === previousRecipient) {
-                    opt.selected = true;
+                if (!step1 || !step2) {
+                    alert('Пожалуйста, заполните поля ситуаций и получателя.');
+                    return;
                 }
-                recipientSelect.appendChild(opt);
-            }
-        });
-    }
 
-    function renderCards(containerId, items) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = "";
+                generateBtn.disabled = true;
+                generateBtn.innerText = 'Генерируем...';
+                statusMsg.style.display = 'none';
 
-        items.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'card' + (index === 1 ? ' active' : '');
-            div.onclick = () => selectCard(div);
-            div.innerHTML = `
-                <div class="card-title">${item.title}</div>
-                <div class="card-desc">${item.desc}</div>
-            `;
-            container.appendChild(div);
-        });
-    }
+                try {
+                    const response = await fetch('/api/generate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ step1, step2, step3, lang })
+                    });
 
-    function selectCard(cardElement) {
-        const grid = cardElement.parentElement;
-        grid.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-        cardElement.classList.add('active');
-    }
+                    const data = await response.json();
 
-    function getFavorites() {
-        try {
-            return JSON.parse(localStorage.getItem('metaphor_favorites')) || [];
-        } catch (e) { return []; }
-    }
+                    if (response.ok) {
+                        resultText.innerText = data.text;
+                        resultCard.style.display = 'block';
 
-    function saveFavorites(list) {
-        localStorage.setItem('metaphor_favorites', JSON.stringify(list));
-        updateFavCountUI();
-    }
-
-    function updateFavCountUI() {
-        const list = getFavorites();
-        document.getElementById('fav-count').innerText = list.length;
-        
-        const btnFav = document.getElementById('btn-fav');
-        const t = translations[currentLang];
-        if (btnFav && currentText) {
-            const isFav = list.includes(currentText);
-            btnFav.classList.toggle('active', isFav);
-            btnFav.innerText = isFav ? t.btnFavRemove : t.btnFavAdd;
-        }
-    }
-
-    function typeWriter(text, elementId, speed = 25) {
-        const el = document.getElementById(elementId);
-        el.innerText = "";
-        let i = 0;
-        if (typingInterval) clearInterval(typingInterval);
-
-        typingInterval = setInterval(() => {
-            if (i < text.length) {
-                el.innerText += text.charAt(i);
-                i++;
-            } else {
-                clearInterval(typingInterval);
-            }
-        }, speed);
-    }
-
-    async function generateText(modifier = "") {
-        const resultText = document.getElementById('result-text');
-        const phoneMockup = document.getElementById('phone-mockup');
-        
-        stopSpeech();
-        if (typingInterval) clearInterval(typingInterval);
-        phoneMockup.style.display = 'block';
-        resultText.innerText = currentLang === 'uz' ? "Izhor yaratilmoqda..." : (currentLang === 'en' ? "Crafting words..." : "Генерируем...");
-
-        const sender = document.getElementById('sender-select').value;
-        const recipient = document.getElementById('recipient-select').value;
-        const active1 = `${sender} ➔ ${recipient}`;
-
-        const baseSituation = document.querySelector('#group-2 .card.active .card-title').innerText;
-        const customDetail = document.getElementById('custom-detail').value.trim();
-        
-        let fullSituation = baseSituation;
-        if (customDetail) {
-            fullSituation += ` (Деталь: ${customDetail})`;
-        }
-        if (modifier) {
-            fullSituation += ` [Модификация: ${modifier}]`;
-        }
-
-        const active3 = document.querySelector('#group-3 .card.active .card-title').innerText;
-
-        const payload = {
-            step1: active1,
-            step2: fullSituation,
-            step3: "Тон: " + active3,
-            lang: currentLang
-        };
-
-        try {
-            const response = await fetch('/api/generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                        // Трекинг успешной генерации
+                        trackEvent({
+                            type: 'event',
+                            eventName: 'generation_success',
+                            language: lang,
+                            tone: step3
+                        });
+                    } else {
+                        statusMsg.innerText = data.text || 'Ошибка при генерации.';
+                        statusMsg.style.display = 'block';
+                    }
+                } catch (err) {
+                    statusMsg.innerText = 'Слова потерялись в пути. Проверьте соединение.';
+                    statusMsg.style.display = 'block';
+                } finally {
+                    generateBtn.disabled = false;
+                    generateBtn.innerText = 'Сгенерировать текст';
+                }
             });
-            const data = await response.json();
-            
-            if (currentText) {
-                textHistory.unshift(currentText);
-                updateVersionsUI();
-            }
 
-            currentText = data.text;
-            typeWriter(currentText, 'result-text');
-            updateFavCountUI();
-        } catch (error) {
-            resultText.innerText = currentLang === 'uz' ? "Xatolik yuz berdi. Qayta urinib ko'ring." : "Слова потерялись в пути. Попробуйте еще раз.";
-        }
-    }
-
-    function tuneText(mod) { generateText(mod); }
-
-    function updateVersionsUI() {
-        const container = document.getElementById('versions-container');
-        const list = document.getElementById('versions-list');
-        list.innerHTML = "";
-        
-        if (textHistory.length > 0) {
-            container.style.display = 'block';
-            textHistory.forEach((item) => {
-                const div = document.createElement('div');
-                div.className = 'version-item';
-                div.innerText = item.length > 60 ? item.substring(0, 60) + '...' : item;
-                div.onclick = () => {
-                    currentText = item;
-                    stopSpeech();
-                    if (typingInterval) clearInterval(typingInterval);
-                    document.getElementById('result-text').innerText = currentText;
-                    updateFavCountUI();
-                };
-                list.appendChild(div);
+            // Кнопка: Копировать
+            copyBtn.addEventListener('click', () => {
+                const text = resultText.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Текст скопирован в буфер обмена!');
+                    trackEvent({
+                        type: 'event',
+                        eventName: 'copy_text',
+                        language: langSelect.value,
+                        tone: document.getElementById('step3').value
+                    });
+                });
             });
-        }
-    }
 
-    /* Text to Speech (Audio) */
-    function toggleSpeech() {
-        if (isSpeaking) {
-            stopSpeech();
-        } else {
-            startSpeech();
-        }
-    }
+            // Кнопка: Озвучить
+            listenBtn.addEventListener('click', () => {
+                const text = resultText.innerText;
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel(); // сброс предыдущей речи
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = langSelect.value === 'uz' ? 'uz-UZ' : (langSelect.value === 'en' ? 'en-US' : 'ru-RU');
+                    window.speechSynthesis.speak(utterance);
 
-    function startSpeech() {
-        if (!currentText || !('speechSynthesis' in window)) return;
-        
-        window.speechSynthesis.cancel();
-        
-        const utterance = new SpeechSynthesisUtterance(currentText);
-        const langCodeMap = { ru: 'ru-RU', uz: 'uz-UZ', en: 'en-US' };
-        utterance.lang = langCodeMap[currentLang] || 'ru-RU';
-        
-        utterance.rate = 0.9;  // Атмосферный замедленный темп
-        utterance.pitch = 0.95; // Теплый мягкий тон
+                    trackEvent({
+                        type: 'event',
+                        eventName: 'listen',
+                        language: langSelect.value,
+                        tone: document.getElementById('step3').value
+                    });
+                } else {
+                    alert('Ваш браузер не поддерживает озвучку текста.');
+                }
+            });
 
-        const voices = window.speechSynthesis.getVoices();
-        const matchedVoice = voices.find(v => v.lang.startsWith(utterance.lang.slice(0, 2)));
-        if (matchedVoice) utterance.voice = matchedVoice;
+            // Кнопка: Download Card
+            downloadBtn.addEventListener('click', () => {
+                alert('Функция генерации картинки-открытки подготавливается!');
+                trackEvent({
+                    type: 'event',
+                    eventName: 'download_card_click',
+                    language: langSelect.value,
+                    tone: document.getElementById('step3').value
+                });
+            });
 
-        utterance.onend = () => {
-            isSpeaking = false;
-            updateSpeechBtnUI();
-        };
+            // Кнопка: В Telegram
+            shareTelegramBtn.addEventListener('click', () => {
+                const text = encodeURIComponent(resultText.innerText);
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
 
-        utterance.onerror = () => {
-            isSpeaking = false;
-            updateSpeechBtnUI();
-        };
-
-        isSpeaking = true;
-        updateSpeechBtnUI();
-        window.speechSynthesis.speak(utterance);
-    }
-
-    function stopSpeech() {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-        }
-        isSpeaking = false;
-        updateSpeechBtnUI();
-    }
-
-    function updateSpeechBtnUI() {
-        const btn = document.getElementById('btn-speech');
-        const t = translations[currentLang];
-        if (!btn) return;
-        
-        if (isSpeaking) {
-            btn.classList.add('playing');
-            btn.innerText = t.btnStopListen;
-        } else {
-            btn.classList.remove('playing');
-            btn.innerText = t.btnListen;
-        }
-    }
-
-    function toggleFavoriteCurrent() {
-        if (!currentText) return;
-        let list = getFavorites();
-        if (list.includes(currentText)) {
-            list = list.filter(t => t !== currentText);
-        } else {
-            list.unshift(currentText);
-        }
-        saveFavorites(list);
-    }
-
-    function openFavoritesModal() {
-        renderFavoritesList();
-        document.getElementById('fav-modal').classList.add('active');
-    }
-
-    function closeFavoritesModal() {
-        document.getElementById('fav-modal').classList.remove('active');
-    }
-
-    function renderFavoritesList() {
-        const container = document.getElementById('fav-list-container');
-        const list = getFavorites();
-        const t = translations[currentLang];
-        container.innerHTML = "";
-
-        if (list.length === 0) {
-            container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px 0;">${t.emptyFav}</div>`;
-            return;
-        }
-
-        list.forEach((text, idx) => {
-            const item = document.createElement('div');
-            item.className = 'fav-item';
-            
-            item.innerHTML = `
-                <div class="fav-item-text">${text}</div>
-                <div class="fav-item-actions">
-                    <button class="btn-tuning" onclick="copyTextDirect(\`${text.replace(/`/g, '\\`')}\`)">${t.btnCopy}</button>
-                    <button class="btn-tuning" onclick="openCardWithText(\`${text.replace(/`/g, '\\`')}\`)">${t.btnCard}</button>
-                    <button class="btn-tuning" style="border-color: #e25555; color: #e25555;" onclick="deleteFavoriteItem(${idx})">✕</button>
-                </div>
-            `;
-            container.appendChild(item);
+                trackEvent({
+                    type: 'event',
+                    eventName: 'telegram_share',
+                    language: langSelect.value,
+                    tone: document.getElementById('step3').value
+                });
+            });
         });
-    }
-
-    function deleteFavoriteItem(index) {
-        let list = getFavorites();
-        list.splice(index, 1);
-        saveFavorites(list);
-        renderFavoritesList();
-    }
-
-    function copyTextDirect(text) {
-        navigator.clipboard.writeText(text).then(() => alert('Copied'));
-    }
-
-    function openCardWithText(text) {
-        currentText = text;
-        closeFavoritesModal();
-        openCardModal();
-    }
-
-    function shareTelegram() {
-        if (!currentText) return;
-        const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(currentText)}`;
-        window.open(url, '_blank');
-    }
-
-    function copyResult() {
-        navigator.clipboard.writeText(currentText).then(() => {
-            alert('OK');
-        });
-    }
-
-    function openCardModal() {
-        if (!currentText) return;
-        document.getElementById('modal-preview-text').innerText = currentText;
-        document.getElementById('card-modal').classList.add('active');
-    }
-
-    function closeCardModal() {
-        document.getElementById('card-modal').classList.remove('active');
-    }
-
-    function setCardTheme(theme, btnElement) {
-        selectedTheme = theme;
-        document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-        if (btnElement) btnElement.classList.add('active');
-
-        const previewBox = document.getElementById('modal-card-preview');
-        previewBox.className = 'card-preview-box theme-' + theme;
-    }
-
-    function downloadCardImage() {
-        const exportCard = document.getElementById('export-card');
-        document.getElementById('export-text-content').innerText = currentText;
-        exportCard.className = 'theme-' + selectedTheme;
-        exportCard.style.display = 'flex';
-        
-        html2canvas(exportCard, { scale: 2 }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `metaphor-card-${selectedTheme}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            exportCard.style.display = 'none';
-        });
-    }
-
-    window.onload = () => {
-        applyTranslations();
-    };
-</script>
+    </script>
 </body>
 </html>
