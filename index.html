@@ -3,212 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metaphor — Искренние и точные слова</title>
+    <title>METAPHOR — Искренние слова</title>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #151d30;
-            --accent-color: #f59e0b;
+            --bg: #090d16;
+            --card-bg: #131b2e;
+            --input-bg: #1c273e;
+            --accent: #f59e0b;
             --accent-hover: #d97706;
-            --text-main: #f8fafc;
+            --text: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: #26334d;
-            --chip-bg: #1e293b;
+            --border: #273552;
+            --radius: 12px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 20px 15px;
+            padding: 20px;
         }
 
-        .container {
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
             width: 100%;
-            max-width: 640px;
+            max-width: 580px;
+            padding: 32px 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
         }
 
         .logo {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--accent-color);
-            letter-spacing: 1.5px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--accent);
         }
 
         .lang-select {
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 8px 14px;
+            background: var(--input-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
             border-radius: 8px;
             outline: none;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
 
-        main {
+        .form-grid {
             display: flex;
             flex-direction: column;
-            gap: 22px;
+            gap: 20px;
         }
 
-        .form-group {
+        .row-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .row-two { grid-template-columns: 1fr; }
+        }
+
+        .field-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
         label {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--text-muted);
         }
 
         input, select {
             width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 13px;
-            border-radius: 10px;
-            font-size: 1rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 13px 14px;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: all 0.2s ease;
         }
 
         input:focus, select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
         }
 
-        /* Быстрые пресеты (Chips) */
-        .chips-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .chip {
-            background: var(--chip-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.82rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .chip:hover {
-            border-color: var(--accent-color);
-            color: var(--text-main);
-        }
-
-        button.btn-primary {
-            background: var(--accent-color);
-            color: #0b0f19;
+        button.btn-submit {
+            background: var(--accent);
+            color: #090d16;
             font-weight: 700;
             border: none;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: var(--radius);
             font-size: 1.05rem;
             cursor: pointer;
+            margin-top: 10px;
             transition: background 0.2s, transform 0.1s;
-            margin-top: 5px;
         }
 
-        button.btn-primary:hover {
+        button.btn-submit:hover {
             background: var(--accent-hover);
         }
 
-        button.btn-primary:active {
+        button.btn-submit:active {
             transform: scale(0.99);
         }
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .result-card {
+        /* Вывод результата */
+        .result-box {
             display: none;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 22px;
-            margin-top: 10px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
         }
 
-        .result-text {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 22px;
+        .result-content {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            font-size: 1.05rem;
+            line-height: 1.6;
             white-space: pre-wrap;
-            color: var(--text-main);
+            margin-bottom: 18px;
         }
 
-        .action-buttons {
+        .action-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 18px;
         }
 
-        .btn-action {
-            background: var(--chip-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 12px;
+        .btn-act {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 11px;
             border-radius: 8px;
             font-size: 0.88rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             transition: all 0.2s;
         }
 
-        .btn-action:hover {
-            background: var(--border-color);
-            border-color: var(--accent-color);
+        .btn-act:hover {
+            border-color: var(--accent);
+            background: var(--input-bg);
         }
 
-        .status-msg {
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            margin-top: 5px;
-            display: none;
+        .status-text {
+            color: #ef4444;
+            font-size: 0.88rem;
             text-align: center;
+            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="app-card">
         <header>
             <div class="logo">METAPHOR</div>
             <select id="langSelect" class="lang-select">
@@ -218,35 +206,42 @@
             </select>
         </header>
 
-        <main>
-            <!-- Шаг 1 -->
-            <div class="form-group">
-                <label for="step1">От кого и кому:</label>
-                <input type="text" id="step1" placeholder="Введите или выберите вариант ниже...">
-                <div class="chips-container" id="chipsStep1">
-                    <span class="chip" data-value="От отца сыну">От отца сыну</span>
-                    <span class="chip" data-value="От друга другу">От друга другу</span>
-                    <span class="chip" data-value="От сына маме">От сына маме</span>
-                    <span class="chip" data-value="Коллеге от команды">Коллеге от команды</span>
+        <main class="form-grid">
+            <!-- Логический блок 1: От кого / Кому -->
+            <div class="row-two">
+                <div class="field-group">
+                    <label for="senderSelect">От кого</label>
+                    <select id="senderSelect">
+                        <option value="Отец">Отец</option>
+                        <option value="Мать">Мать</option>
+                        <option value="Муж">Муж</option>
+                        <option value="Жена">Жена</option>
+                        <option value="Друг">Друг</option>
+                        <option value="Подруга">Подруга</option>
+                        <option value="Брат">Брат</option>
+                        <option value="Сестра">Сестра</option>
+                        <option value="Коллега">Коллега</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="recipientSelect">Кому</label>
+                    <select id="recipientSelect">
+                        <!-- Динамически заполняется через JS -->
+                    </select>
                 </div>
             </div>
 
-            <!-- Шаг 2 -->
-            <div class="form-group">
-                <label for="step2">Ситуация / Повод:</label>
-                <input type="text" id="step2" placeholder="Введите или выберите быструю подсказку...">
-                <div class="chips-container" id="chipsStep2">
-                    <span class="chip" data-value="День рождения">День рождения</span>
-                    <span class="chip" data-value="Поддержка в важный момент">Поддержка</span>
-                    <span class="chip" data-value="Сдача экзаменов / IELTS">Сдача экзаменов</span>
-                    <span class="chip" data-value="Слова благодарности">Благодарность</span>
-                </div>
+            <!-- Логический блок 2: Ситуация -->
+            <div class="field-group">
+                <label for="eventInput">Ситуация / Повод</label>
+                <input type="text" id="eventInput" placeholder="Например: День рождения, поддержка перед экзаменом...">
             </div>
 
-            <!-- Шаг 3 -->
-            <div class="form-group">
-                <label for="step3">Тон / Тональность:</label>
-                <select id="step3">
+            <!-- Логический блок 3: Тональность -->
+            <div class="field-group">
+                <label for="toneSelect">Тон / Тональность</label>
+                <select id="toneSelect">
                     <option value="Искренний и теплый">Искренний и теплый</option>
                     <option value="Восточная классика">Восточная классика</option>
                     <option value="Западная драма">Западная драма</option>
@@ -255,230 +250,177 @@
                 </select>
             </div>
 
-            <button id="generateBtn" class="btn-primary">Сгенерировать текст</button>
-            <div id="statusMsg" class="status-msg"></div>
+            <button id="generateBtn" class="btn-submit">Сгенерировать текст</button>
+            <div id="statusText" class="status-text"></div>
 
-            <!-- Карточка результата -->
-            <div id="resultCard" class="result-card">
-                <div id="resultText" class="result-text"></div>
-                
-                <div class="action-buttons">
-                    <button id="copyBtn" class="btn-action">📋 Копировать</button>
-                    <button id="listenBtn" class="btn-action">🔊 Озвучить</button>
-                    <button id="downloadBtn" class="btn-action">🎨 Скачать карту</button>
-                    <button id="shareTelegramBtn" class="btn-action">✈️ В Telegram</button>
+            <!-- Блок результатов -->
+            <div id="resultBox" class="result-box">
+                <div id="resultText" class="result-content"></div>
+                <div class="action-grid">
+                    <button id="copyBtn" class="btn-act">📋 Копировать</button>
+                    <button id="speechBtn" class="btn-act">🔊 Озвучить</button>
+                    <button id="downloadBtn" class="btn-act">🎨 Скачать карту</button>
+                    <button id="telegramBtn" class="btn-act">✈️ В Telegram</button>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // Функция трекинга аналитики
-        async function trackEvent(payload) {
+        // Логика допустимых связей (Кто -> Кому)
+        const recipientRules = {
+            'Отец': ['Сын', 'Дочь'],
+            'Мать': ['Сын', 'Дочь'],
+            'Муж': ['Жена'],
+            'Жена': ['Муж'],
+            'Друг': ['Друг', 'Подруга'],
+            'Подруга': ['Друг', 'Подруга'],
+            'Брат': ['Брат', 'Сестра'],
+            'Сестра': ['Брат', 'Сестра'],
+            'Коллега': ['Коллега', 'Команда', 'Руководитель']
+        };
+
+        const senderSelect = document.getElementById('senderSelect');
+        const recipientSelect = document.getElementById('recipientSelect');
+        const eventInput = document.getElementById('eventInput');
+        const toneSelect = document.getElementById('toneSelect');
+        const langSelect = document.getElementById('langSelect');
+
+        const generateBtn = document.getElementById('generateBtn');
+        const resultBox = document.getElementById('resultBox');
+        const resultText = document.getElementById('resultText');
+        const statusText = document.getElementById('statusText');
+
+        // Аналитика
+        async function trackEvent(data) {
             try {
                 await fetch('/api/track', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(data)
                 });
-            } catch (e) {
-                console.error('Analytics error:', e);
-            }
+            } catch (e) {}
         }
 
-        // Генерация картинки-открытки на HTML5 Canvas
-        function generateCardCanvas(text, tone) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 1080;
-            canvas.height = 1080;
-            const ctx = canvas.getContext('2d');
+        // Обновление списка «Кому» в зависимости от «От кого»
+        function updateRecipients() {
+            const sender = senderSelect.value;
+            const allowed = recipientRules[sender] || ['Друг', 'Коллега'];
 
-            // Фон (Градиент)
-            const grad = ctx.createLinearGradient(0, 0, 1080, 1080);
-            grad.addColorStop(0, '#0b0f19');
-            grad.addColorStop(0.5, '#151d30');
-            grad.addColorStop(1, '#05070c');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 1080, 1080);
+            recipientSelect.innerHTML = allowed.map(item => `<option value="${item}">${item}</option>`).join('');
+        }
 
-            // Золотая рамка
-            ctx.strokeStyle = '#f59e0b';
-            ctx.lineWidth = 6;
-            ctx.strokeRect(50, 50, 980, 980);
+        senderSelect.addEventListener('change', updateRecipients);
+        updateRecipients(); // инициализация
 
-            // Логотип
-            ctx.fillStyle = '#f59e0b';
-            ctx.font = 'bold 42px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('METAPHOR', 540, 130);
+        // Инициализация языка
+        const savedLang = localStorage.getItem('app_lang') || 'ru';
+        langSelect.value = savedLang;
+        trackEvent({ type: 'visit', language: savedLang });
 
-            // Тональность
-            ctx.fillStyle = '#94a3b8';
-            ctx.font = '24px sans-serif';
-            ctx.fillText(`— ${tone} —`, 540, 185);
+        langSelect.addEventListener('change', (e) => {
+            localStorage.setItem('app_lang', e.target.value);
+        });
 
-            // Разбивка текста по строкам
-            ctx.fillStyle = '#f8fafc';
-            ctx.font = '32px sans-serif';
-            const words = text.split(' ');
-            let line = '';
-            let lines = [];
-            const maxWidth = 860;
-            const lineHeight = 50;
+        // Генерация
+        generateBtn.addEventListener('click', async () => {
+            const sender = senderSelect.value;
+            const recipient = recipientSelect.value;
+            const eventVal = eventInput.value.trim();
+            const tone = toneSelect.value;
+            const lang = langSelect.value;
 
-            for (let n = 0; n < words.length; n++) {
-                let testLine = line + words[n] + ' ';
-                let metrics = ctx.measureText(testLine);
-                if (metrics.width > maxWidth && n > 0) {
-                    lines.push(line);
-                    line = words[n] + ' ';
+            if (!eventVal) {
+                alert('Укажите повод или ситуацию!');
+                return;
+            }
+
+            generateBtn.disabled = true;
+            generateBtn.innerText = 'Создаем текст...';
+            statusText.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        step1: `От ${sender.toLowerCase()} к ${recipient.toLowerCase()}`,
+                        step2: eventVal,
+                        step3: tone,
+                        lang: lang
+                    })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    resultText.innerText = data.text;
+                    resultBox.style.display = 'block';
+                    trackEvent({ type: 'event', eventName: 'generation_success', language: lang, tone });
                 } else {
-                    line = testLine;
+                    statusText.innerText = data.text || 'Ошибка генерации.';
+                    statusText.style.display = 'block';
                 }
+            } catch (e) {
+                statusText.innerText = 'Ошибка соединения с сервером.';
+                statusText.style.display = 'block';
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerText = 'Сгенерировать текст';
+            }
+        });
+
+        // Кнопки действий
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(resultText.innerText);
+            alert('Скопировано!');
+            trackEvent({ type: 'event', eventName: 'copy_text' });
+        });
+
+        document.getElementById('speechBtn').addEventListener('click', () => {
+            if (!('speechSynthesis' in window)) return alert('Озвучка не поддерживается браузером.');
+            window.speechSynthesis.cancel();
+            const utt = new SpeechSynthesisUtterance(resultText.innerText);
+            utt.lang = langSelect.value === 'uz' ? 'uz-UZ' : (langSelect.value === 'en' ? 'en-US' : 'ru-RU');
+            window.speechSynthesis.speak(utt);
+            trackEvent({ type: 'event', eventName: 'listen' });
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            // Генерация Canvas
+            const cvs = document.createElement('canvas');
+            cvs.width = 1000; cvs.height = 1000;
+            const ctx = cvs.getContext('2d');
+            
+            ctx.fillStyle = '#131b2e'; ctx.fillRect(0,0,1000,1000);
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 8; ctx.strokeRect(40,40,920,920);
+            
+            ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 38px sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText('METAPHOR', 500, 120);
+
+            ctx.fillStyle = '#ffffff'; ctx.font = '28px sans-serif';
+            const words = resultText.innerText.split(' ');
+            let line = '', lines = [];
+            for (let w of words) {
+                let test = line + w + ' ';
+                if (ctx.measureText(test).width > 800) { lines.push(line); line = w + ' '; }
+                else line = test;
             }
             lines.push(line);
 
-            // Отрисовка по центру
-            let startY = 540 - ((lines.length * lineHeight) / 2);
-            for (let i = 0; i < lines.length; i++) {
-                ctx.fillText(lines[i], 540, startY + (i * lineHeight));
-            }
+            let y = 500 - (lines.length * 20);
+            lines.forEach((l, i) => ctx.fillText(l, 500, y + (i * 45)));
 
-            // Водяной знак
-            ctx.fillStyle = '#64748b';
-            ctx.font = '20px sans-serif';
-            ctx.fillText('metaphor.app', 540, 980);
+            const a = document.createElement('a');
+            a.download = 'metaphor-card.png';
+            a.href = cvs.toDataURL();
+            a.click();
+            trackEvent({ type: 'event', eventName: 'download_card' });
+        });
 
-            // Скачивание PNG
-            const link = document.createElement('a');
-            link.download = `metaphor-card-${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const langSelect = document.getElementById('langSelect');
-            const step1Input = document.getElementById('step1');
-            const step2Input = document.getElementById('step2');
-            const step3Select = document.getElementById('step3');
-
-            const generateBtn = document.getElementById('generateBtn');
-            const resultCard = document.getElementById('resultCard');
-            const resultText = document.getElementById('resultText');
-            const statusMsg = document.getElementById('statusMsg');
-
-            const copyBtn = document.getElementById('copyBtn');
-            const listenBtn = document.getElementById('listenBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const shareTelegramBtn = document.getElementById('shareTelegramBtn');
-
-            // Поддержка быстрых подсказок (Chips)
-            document.querySelectorAll('.chip').forEach(chip => {
-                chip.addEventListener('click', (e) => {
-                    const targetInput = e.target.closest('.form-group').querySelector('input');
-                    targetInput.value = e.target.getAttribute('data-value');
-                });
-            });
-
-            // Восстановление языка
-            const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
-            langSelect.value = savedLang;
-
-            // Фиксация визита
-            trackEvent({ type: 'visit', language: savedLang });
-
-            langSelect.addEventListener('change', (e) => {
-                localStorage.setItem('selectedLanguage', e.target.value);
-            });
-
-            // Генерация текста
-            generateBtn.addEventListener('click', async () => {
-                const step1 = step1Input.value.trim();
-                const step2 = step2Input.value.trim();
-                const step3 = step3Select.value;
-                const lang = langSelect.value;
-
-                if (!step1 || !step2) {
-                    alert('Заполните, пожалуйста, оба поля или выберите быстрые подсказки ниже.');
-                    return;
-                }
-
-                generateBtn.disabled = true;
-                generateBtn.innerText = 'Генерируем слова...';
-                statusMsg.style.display = 'none';
-
-                try {
-                    const response = await fetch('/api/generate', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ step1, step2, step3, lang })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        resultText.innerText = data.text;
-                        resultCard.style.display = 'block';
-
-                        trackEvent({
-                            type: 'event',
-                            eventName: 'generation_success',
-                            language: lang,
-                            tone: step3
-                        });
-                    } else {
-                        statusMsg.innerText = data.text || 'Ошибка генерации.';
-                        statusMsg.style.display = 'block';
-                    }
-                } catch (err) {
-                    statusMsg.innerText = 'Ошибка связи с сервером.';
-                    statusMsg.style.display = 'block';
-                } finally {
-                    generateBtn.disabled = false;
-                    generateBtn.innerText = 'Сгенерировать текст';
-                }
-            });
-
-            // Копирование
-            copyBtn.addEventListener('click', () => {
-                navigator.clipboard.writeText(resultText.innerText).then(() => {
-                    alert('Текст скопирован!');
-                    trackEvent({ type: 'event', eventName: 'copy_text', language: langSelect.value, tone: step3Select.value });
-                });
-            });
-
-            // Озвучка (Надежный Web Speech API)
-            listenBtn.addEventListener('click', () => {
-                const text = resultText.innerText;
-                if (!('speechSynthesis' in window)) {
-                    alert('Ваш браузер не поддерживает озвучку.');
-                    return;
-                }
-
-                window.speechSynthesis.cancel(); // сбросить старую речь
-                const utterance = new SpeechSynthesisUtterance(text);
-                
-                const langMap = { ru: 'ru-RU', uz: 'uz-UZ', en: 'en-US' };
-                utterance.lang = langMap[langSelect.value] || 'ru-RU';
-                utterance.rate = 0.95; // комфортный темп
-
-                window.speechSynthesis.speak(utterance);
-
-                trackEvent({ type: 'event', eventName: 'listen', language: langSelect.value, tone: step3Select.value });
-            });
-
-            // Скачивание открытки (Canvas)
-            downloadBtn.addEventListener('click', () => {
-                generateCardCanvas(resultText.innerText, step3Select.value);
-                trackEvent({ type: 'event', eventName: 'download_card', language: langSelect.value, tone: step3Select.value });
-            });
-
-            // В Telegram
-            shareTelegramBtn.addEventListener('click', () => {
-                const text = encodeURIComponent(resultText.innerText);
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`, '_blank');
-                trackEvent({ type: 'event', eventName: 'telegram_share', language: langSelect.value, tone: step3Select.value });
-            });
+        document.getElementById('telegramBtn').addEventListener('click', () => {
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(resultText.innerText)}`, '_blank');
+            trackEvent({ type: 'event', eventName: 'telegram_share' });
         });
     </script>
 </body>
