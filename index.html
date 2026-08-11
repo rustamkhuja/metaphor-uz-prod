@@ -147,7 +147,6 @@
             border-color: var(--accent-gold);
         }
 
-        /* Сетка для блоков 2 и 3: ровно по 3 карточки в ряд */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -353,7 +352,7 @@
             border-color: var(--accent-gold);
         }
 
-        /* Модальное окно редактирования открытки */
+        /* Модальное окно редактирования и стилизации открытки */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -369,32 +368,64 @@
             border: 1px solid var(--border-color);
             border-radius: 16px;
             width: 100%;
-            max-width: 540px;
+            max-width: 580px;
             padding: 24px;
             display: flex;
             flex-direction: column;
             gap: 16px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .modal-title {
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--accent-gold);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
+        
+        /* Выбор стиля открытки */
+        .theme-selector-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+        .theme-options {
+            display: flex;
+            gap: 8px;
+        }
+        .theme-btn {
+            flex: 1;
+            background: #1c1c1c;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .theme-btn.active {
+            border-color: var(--accent-gold);
+            color: var(--text-main);
+            background: #251f18;
+            font-weight: 600;
+        }
+
         .card-preview-area {
-            background: #111;
-            border: 2px solid var(--accent-gold);
             border-radius: 12px;
             padding: 30px;
             text-align: center;
             font-family: Georgia, serif;
-            font-size: 1.2rem;
-            color: #fff;
+            font-size: 1.15rem;
             line-height: 1.6;
-            min-height: 200px;
+            min-height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s;
         }
         .modal-textarea {
             width: 100%;
@@ -403,9 +434,9 @@
             color: #fff;
             padding: 12px;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             resize: vertical;
-            min-height: 100px;
+            min-height: 90px;
             outline: none;
             font-family: Georgia, serif;
         }
@@ -415,7 +446,7 @@
         .modal-buttons {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 6px;
         }
     </style>
 </head>
@@ -460,7 +491,7 @@
                 </select>
             </section>
 
-            <!-- Блок 2: Ситуация и Чувство (по 3 в ряду) -->
+            <!-- Блок 2: Ситуация и Чувство -->
             <section>
                 <div class="section-title" id="sec2Title">2. Ситуация и Чувство</div>
                 <div class="cards-grid" id="situationCards">
@@ -488,7 +519,7 @@
                 <input type="text" id="customSituation" class="custom-input-card" placeholder="Добавьте точную деталь (необязательно)...">
             </section>
 
-            <!-- Блок 3: Интонация (по 3 в ряду) -->
+            <!-- Блок 3: Интонация -->
             <section>
                 <div class="section-title" id="sec3Title">3. Интонация</div>
                 <div class="cards-grid" id="toneCards">
@@ -548,12 +579,23 @@
         </main>
     </div>
 
-    <!-- Модальное окно редактирования открытки -->
+    <!-- Модальное окно редактирования и стилизации открытки -->
     <div class="modal-overlay" id="cardModal">
         <div class="modal-card">
             <div class="modal-title" id="modalTitleText">Редактирование открытки</div>
+            
+            <div>
+                <div class="theme-selector-label" id="themeLabelText">Стиль открытки:</div>
+                <div class="theme-options">
+                    <button class="theme-btn active" data-theme="dark">Тёмная</button>
+                    <button class="theme-btn" data-theme="light">Светлая</button>
+                    <button class="theme-btn" data-theme="gold">Золотая</button>
+                </div>
+            </div>
+
             <div class="card-preview-area" id="modalPreview">Текст открытки...</div>
             <textarea class="modal-textarea" id="modalTextEdit"></textarea>
+            
             <div class="modal-buttons">
                 <button class="btn-action" style="flex:1;" id="modalCancelBtn">Отмена</button>
                 <button class="btn-submit" style="flex:1; margin:0;" id="modalDownloadBtn">Скачать PNG</button>
@@ -617,7 +659,11 @@
                     metaphor: "Больше метафор",
                     formal: "Более формально",
                     historyLabel: "Предыдущие версии",
-                    modalTitle: "Редактирование открытки перед скачиванием",
+                    modalTitle: "Оформление открытки",
+                    themeLabel: "Стиль открытки:",
+                    tDark: "Тёмная",
+                    tLight: "Светлая",
+                    tGold: "Золотая",
                     modalCancel: "Отмена",
                     modalDownload: "Скачать PNG",
                     sit1_t: "Тяжелая ссора", sit1_d: "Гордость мешает сказать «прости»",
@@ -654,7 +700,11 @@
                     metaphor: "Ko'proq metafora",
                     formal: "Rasmiyroq",
                     historyLabel: "Oldingi versiyalar",
-                    modalTitle: "Yuklab olishdan oldin ochiqchani tahrirlash",
+                    modalTitle: "Ochiqcha dizayni",
+                    themeLabel: "Ochiqcha uslubi:",
+                    tDark: "To'q",
+                    tLight: "Yorug'",
+                    tGold: "Oltin",
                     modalCancel: "Bekor qilish",
                     modalDownload: "PNG yuklab olish",
                     sit1_t: "Og'ir janjal", sit1_d: "G'urur 'kechir' deyishga qo'ymayapti",
@@ -691,7 +741,11 @@
                     metaphor: "More metaphors",
                     formal: "More formal",
                     historyLabel: "Previous versions",
-                    modalTitle: "Edit postcard before download",
+                    modalTitle: "Postcard Styling",
+                    themeLabel: "Card Style:",
+                    tDark: "Dark",
+                    tLight: "Light",
+                    tGold: "Gold",
                     modalCancel: "Cancel",
                     modalDownload: "Download PNG",
                     sit1_t: "Heavy argument", sit1_d: "Pride prevents saying 'sorry'",
@@ -711,6 +765,7 @@
             let currentLang = localStorage.getItem('app_lang') || 'ru';
             let selectedSit = 'sit1';
             let selectedTone = 'tone2';
+            let currentCardTheme = 'dark'; // Текущая тема открытки
             let textHistory = [];
 
             const senderSelect = document.getElementById('senderSelect');
@@ -755,8 +810,16 @@
                 document.getElementById('favToggleBtn').innerText = t.toFav;
                 document.getElementById('historyTitleLabel').innerText = t.historyLabel;
                 document.getElementById('modalTitleText').innerText = t.modalTitle;
+                document.getElementById('themeLabelText').innerText = t.themeLabel;
                 document.getElementById('modalCancelBtn').innerText = t.modalCancel;
                 document.getElementById('modalDownloadBtn').innerText = t.modalDownload;
+
+                const themeBtns = document.querySelectorAll('.theme-btn');
+                if(themeBtns.length >= 3) {
+                    themeBtns[0].innerText = t.tDark;
+                    themeBtns[1].innerText = t.tLight;
+                    themeBtns[2].innerText = t.tGold;
+                }
 
                 const currentSenderVal = senderSelect.value || 'father';
                 senderSelect.innerHTML = '';
@@ -826,7 +889,6 @@
             const historySection = document.getElementById('historySection');
             const historyList = document.getElementById('historyList');
 
-            // Имитация печатания (Typewriter effect)
             function typeWriter(text, i = 0) {
                 if (i === 0) resultText.innerText = '';
                 if (i < text.length) {
@@ -943,14 +1005,46 @@
                 updateFavCount();
             });
 
-            // Модальное окно редактирования открытки перед скачиванием
+            // Модальное окно редактирования и стилизации открытки
             const cardModal = document.getElementById('cardModal');
             const modalTextEdit = document.getElementById('modalTextEdit');
             const modalPreview = document.getElementById('modalPreview');
 
+            function applyCardTheme(theme) {
+                currentCardTheme = theme;
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    if(btn.getAttribute('data-theme') === theme) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                if (theme === 'dark') {
+                    modalPreview.style.background = '#121212';
+                    modalPreview.style.color = '#ffffff';
+                    modalPreview.style.borderColor = '#d4b58f';
+                } else if (theme === 'light') {
+                    modalPreview.style.background = '#fcfcfc';
+                    modalPreview.style.color = '#1a1a1a';
+                    modalPreview.style.borderColor = '#b59367';
+                } else if (theme === 'gold') {
+                    modalPreview.style.background = '#0d0b09';
+                    modalPreview.style.color = '#d4b58f';
+                    modalPreview.style.borderColor = '#d4b58f';
+                }
+            }
+
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    applyCardTheme(btn.getAttribute('data-theme'));
+                });
+            });
+
             document.getElementById('downloadCardBtn').addEventListener('click', () => {
                 modalTextEdit.value = resultText.innerText;
                 modalPreview.innerText = resultText.innerText;
+                applyCardTheme('dark'); // по умолчанию при открытии
                 cardModal.style.display = 'flex';
             });
 
@@ -967,19 +1061,31 @@
                 canvas.width = 1000; canvas.height = 1000;
                 const ctx = canvas.getContext('2d');
 
-                ctx.fillStyle = '#121212';
+                // Цветовая схема для Canvas
+                let bgCol = '#121212', textCol = '#ffffff', accentCol = '#d4b58f';
+                if (currentCardTheme === 'light') {
+                    bgCol = '#fcfcfc';
+                    textCol = '#1a1a1a';
+                    accentCol = '#b59367';
+                } else if (currentCardTheme === 'gold') {
+                    bgCol = '#0d0b09';
+                    textCol = '#d4b58f';
+                    accentCol = '#d4b58f';
+                }
+
+                ctx.fillStyle = bgCol;
                 ctx.fillRect(0, 0, 1000, 1000);
 
-                ctx.strokeStyle = '#d4b58f';
+                ctx.strokeStyle = accentCol;
                 ctx.lineWidth = 4;
                 ctx.strokeRect(50, 50, 900, 900);
 
-                ctx.fillStyle = '#d4b58f';
+                ctx.fillStyle = accentCol;
                 ctx.font = '36px Georgia, serif';
                 ctx.textAlign = 'center';
                 ctx.fillText('METAPHOR', 500, 130);
 
-                ctx.fillStyle = '#ffffff';
+                ctx.fillStyle = textCol;
                 ctx.font = '30px Georgia, serif';
                 
                 const words = modalTextEdit.value.split(' ');
@@ -995,7 +1101,7 @@
                 lines.forEach((l, i) => ctx.fillText(l, 500, startY + (i * 48)));
 
                 const link = document.createElement('a');
-                link.download = 'metaphor-card.png';
+                link.download = `metaphor-${currentCardTheme}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
                 
