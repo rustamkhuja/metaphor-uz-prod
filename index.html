@@ -58,7 +58,14 @@
             margin-bottom: 18px;
         }
 
-        .favorites-btn {
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .favorites-btn, .lang-select {
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-main);
@@ -66,11 +73,17 @@
             border-radius: 20px;
             font-size: 0.85rem;
             cursor: pointer;
+            outline: none;
             transition: all 0.2s;
         }
 
-        .favorites-btn:hover {
+        .favorites-btn:hover, .lang-select:hover {
             border-color: var(--accent-gold);
+        }
+
+        .lang-select option {
+            background: var(--card-bg);
+            color: var(--text-main);
         }
 
         section {
@@ -109,7 +122,6 @@
             border-color: var(--accent-gold);
         }
 
-        /* Сетка карточек для ситуаций и интонаций */
         .cards-grid {
             display: flex;
             flex-direction: column;
@@ -158,10 +170,6 @@
             margin-top: 5px;
         }
 
-        .custom-input-card::placeholder {
-            color: var(--text-muted);
-        }
-
         .btn-submit {
             width: 100%;
             background: var(--accent-gold);
@@ -198,6 +206,33 @@
             color: var(--text-main);
             white-space: pre-wrap;
             font-family: Georgia, serif;
+            min-height: 80px;
+        }
+
+        /* Доп. меню после генерации (Короче, Метафоры, Формально) */
+        .post-menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .btn-mini {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-mini:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
         }
 
         .actions-row {
@@ -241,7 +276,15 @@
         <header>
             <h1 class="logo">Metaphor</h1>
             <p class="subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</p>
-            <button class="favorites-btn" id="favCountBtn">❤️ Избранное ( 0 )</button>
+            
+            <div class="top-controls">
+                <select id="langSelect" class="lang-select">
+                    <option value="ru">Русский</option>
+                    <option value="uz">O'zbekcha</option>
+                    <option value="en">English</option>
+                </select>
+                <button class="favorites-btn" id="favCountBtn">❤️ Избранное ( 0 )</button>
+            </div>
         </header>
 
         <main>
@@ -295,7 +338,7 @@
                         <div class="card-desc">Разделение радости победы</div>
                     </div>
                 </div>
-                <input type="text" id="customSituation" class="custom-input-card" placeholder="Добавьте точную деталь (необязательно, напр: з...">
+                <input type="text" id="customSituation" class="custom-input-card" placeholder="Добавьте точную деталь (необязательно)...">
             </section>
 
             <!-- Блок 3: Интонация -->
@@ -332,8 +375,15 @@
             <button id="generateBtn" class="btn-submit">СОЗДАТЬ СЛОВА</button>
             <div id="statusMsg" class="status-msg"></div>
 
-            <!-- Блок вывода -->
+            <!-- Блок вывода с доп. меню -->
             <div id="resultBox" class="result-box">
+                <!-- Доп меню подстройки текста -->
+                <div class="post-menu">
+                    <button class="btn-mini" id="modShorter">Короче</button>
+                    <button class="btn-mini" id="modMetaphor">Больше метафор</button>
+                    <button class="btn-mini" id="modFormal">Более формально</button>
+                </div>
+
                 <div id="resultText" class="result-text"></div>
                 
                 <div class="actions-row">
@@ -360,7 +410,23 @@
             } catch (e) {}
         }
 
-        trackEvent({ type: 'visit', language: 'ru' });
+        const savedLang = localStorage.getItem('app_lang') || 'ru';
+        const langSelect = document.getElementById('langSelect');
+        langSelect.value = savedLang;
+        trackEvent({ type: 'visit', language: savedLang });
+
+        langSelect.addEventListener('change', (e) => {
+            localStorage.setItem('app_lang', e.target.value);
+        });
+
+        // Эффект печати текста (Typewriter)
+        async function typeWriter(text, element) {
+            element.innerText = '';
+            for (let i = 0; i < text.length; i++) {
+                element.innerText += text.charAt(i);
+                if (i % 4 === 0) await new Promise(r => setTimeout(r, 5));
+            }
+        }
 
         // Выбор карточек ситуаций
         let selectedSituation = "Тяжелая ссора: Гордость мешает сказать прости";
@@ -382,7 +448,7 @@
             });
         });
 
-        // Избранное (LocalStorage)
+        // Избранное
         let favorites = JSON.parse(localStorage.getItem('metaphor_favs') || '[]');
         const favCountBtn = document.getElementById('favCountBtn');
         function updateFavCount() {
@@ -395,15 +461,18 @@
         const resultText = document.getElementById('resultText');
         const statusMsg = document.getElementById('statusMsg');
 
-        // Генерация
-        generateBtn.addEventListener('click', async () => {
+        async function fetchGeneration(extraInstruction = '') {
             const sender = document.getElementById('senderSelect').value;
             const recipient = document.getElementById('recipientSelect').value;
             const customDetail = document.getElementById('customSituation').value.trim();
+            const lang = langSelect.value;
             
             let situationFinal = selectedSituation;
             if (customDetail) {
                 situationFinal += `. Деталь: ${customDetail}`;
+            }
+            if (extraInstruction) {
+                situationFinal += `. Стиль корректировки: ${extraInstruction}`;
             }
 
             generateBtn.disabled = true;
@@ -418,16 +487,16 @@
                         step1: `От ${sender} к ${recipient}`,
                         step2: situationFinal,
                         step3: selectedTone,
-                        lang: 'ru'
+                        lang: lang
                     })
                 });
 
                 const data = await res.json();
                 if (res.ok) {
-                    resultText.innerText = data.text;
                     resultBox.style.display = 'block';
+                    await typeWriter(data.text, resultText);
                     window.scrollTo({ top: resultBox.offsetTop - 20, behavior: 'smooth' });
-                    trackEvent({ type: 'event', eventName: 'generation_success', tone: selectedTone });
+                    trackEvent({ type: 'event', eventName: 'generation_success', tone: selectedTone, language: lang });
                 } else {
                     statusMsg.innerText = data.text || 'Ошибка генерации';
                     statusMsg.style.display = 'block';
@@ -439,7 +508,14 @@
                 generateBtn.disabled = false;
                 generateBtn.innerText = 'СОЗДАТЬ СЛОВА';
             }
-        });
+        }
+
+        generateBtn.addEventListener('click', () => fetchGeneration());
+
+        // Обработчики мини-меню (Короче, Метафоры, Формально)
+        document.getElementById('modShorter').addEventListener('click', () => fetchGeneration('сделай текст короче и лаконичнее'));
+        document.getElementById('modMetaphor').addEventListener('click', () => fetchGeneration('добавь больше красивых метафор и образности'));
+        document.getElementById('modFormal').addEventListener('click', () => fetchGeneration('сделай текст более формальным и сдержанным'));
 
         // Кнопки управления результатом
         document.getElementById('copyBtn').addEventListener('click', () => {
