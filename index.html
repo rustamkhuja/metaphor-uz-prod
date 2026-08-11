@@ -22,6 +22,7 @@
             --text-muted: #8e8e93;
             --border: #2c2c2e;
             --tg-color: #29a0da;
+            --heart-color: #e25555;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,20 +36,42 @@
 
         .container { max-width: 600px; margin: 40px auto 100px; }
         
+        .header-box {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
         h1 { 
             font-family: 'Playfair Display', serif; 
             font-size: 32px; 
-            text-align: center; 
             color: var(--text-main); 
             margin-bottom: 8px; 
             letter-spacing: 2px;
         }
 
         .subtitle { 
-            text-align: center; 
             color: var(--text-muted); 
             font-size: 0.9rem; 
-            margin-bottom: 40px; 
+            margin-bottom: 16px; 
+        }
+
+        .fav-header-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .fav-header-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .section-title { 
@@ -222,17 +245,18 @@
             cursor: pointer; 
             border-radius: 20px; 
             transition: 0.3s; 
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         .btn-tuning:hover { border-color: var(--accent); color: var(--accent); }
 
-        .btn-tg {
-            border-color: var(--tg-color);
-            color: var(--tg-color);
-        }
-        .btn-tg:hover {
-            background: var(--tg-color);
-            color: #fff;
-        }
+        .btn-tg { border-color: var(--tg-color); color: var(--tg-color); }
+        .btn-tg:hover { background: var(--tg-color); color: #fff; }
+
+        .btn-fav { border-color: var(--heart-color); color: var(--heart-color); }
+        .btn-fav.active { background: var(--heart-color); color: #fff; }
+        .btn-fav:hover { opacity: 0.9; }
 
         .versions-section {
             margin-top: 25px;
@@ -307,10 +331,7 @@
         }
         .modal-close:hover { color: var(--text-main); }
 
-        .theme-selector {
-            display: flex;
-            gap: 8px;
-        }
+        .theme-selector { display: flex; gap: 8px; }
         .theme-btn {
             flex: 1;
             padding: 10px 8px;
@@ -322,10 +343,7 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .theme-btn.active, .theme-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
+        .theme-btn.active, .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
 
         .preview-wrapper {
             display: flex;
@@ -358,7 +376,12 @@
             white-space: pre-wrap;
             max-height: 240px;
             overflow-y: auto;
+            
+            /* Скрываем скроллбар */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
+        .preview-text::-webkit-scrollbar { display: none; }
 
         .preview-logo {
             font-family: 'Playfair Display', serif;
@@ -367,29 +390,41 @@
             font-weight: 600;
         }
 
-        /* Themes */
-        .theme-obsidian {
-            background: #141415 !important;
-            color: #f0ebe1 !important;
-            border: 12px solid #d1a766 !important;
+        /* Favorites list inside modal */
+        .fav-list { display: flex; flex-direction: column; gap: 12px; }
+        .fav-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
+        .fav-item-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            white-space: pre-wrap;
+        }
+        .fav-item-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        /* Card Themes */
+        .theme-obsidian { background: #141415 !important; color: #f0ebe1 !important; border: 12px solid #d1a766 !important; }
         .theme-obsidian .preview-logo, .theme-obsidian .export-logo { color: #d1a766 !important; }
 
-        .theme-cream {
-            background: #fdfbf7 !important;
-            color: #2b2621 !important;
-            border: 12px solid #8c7355 !important;
-        }
+        .theme-cream { background: #fdfbf7 !important; color: #2b2621 !important; border: 12px solid #8c7355 !important; }
         .theme-cream .preview-logo, .theme-cream .export-logo { color: #8c7355 !important; }
 
-        .theme-emerald {
-            background: #091a13 !important;
-            color: #e3efe9 !important;
-            border: 12px solid #529471 !important;
-        }
+        .theme-emerald { background: #091a13 !important; color: #e3efe9 !important; border: 12px solid #529471 !important; }
         .theme-emerald .preview-logo, .theme-emerald .export-logo { color: #529471 !important; }
 
-        /* Hidden export canvas container */
+        /* Export canvas */
         #export-card {
             display: none;
             padding: 60px;
@@ -412,8 +447,13 @@
 <body>
 
 <div class="container">
-    <h1>Metaphor</h1>
-    <div class="subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
+    <div class="header-box">
+        <h1>Metaphor</h1>
+        <div class="subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
+        <button class="fav-header-btn" onclick="openFavoritesModal()">
+            ❤️ Избранное (<span id="fav-count">0</span>)
+        </button>
+    </div>
     
     <div class="section-title">1. Кто и кому?</div>
     <div class="dropdown-group">
@@ -497,6 +537,7 @@
                 <button class="btn-tuning" onclick="tuneText('Смени стиль на более формальный')">Более формально</button>
             </div>
             <div class="result-actions" style="margin-top: 15px;">
+                <button class="btn-tuning btn-fav" id="btn-fav" onclick="toggleFavoriteCurrent()">❤️ В избранное</button>
                 <button class="btn-tuning btn-tg" onclick="shareTelegram()">В Telegram</button>
                 <button class="btn-tuning" onclick="copyResult()">Скопировать</button>
                 <button class="btn-tuning" onclick="openCardModal()">Скачать открытку</button>
@@ -532,6 +573,17 @@
     </div>
 </div>
 
+<!-- Модальное окно Избранное -->
+<div class="modal-overlay" id="fav-modal">
+    <div class="modal-body">
+        <div class="modal-header">
+            <h3>Сохраненные метафоры</h3>
+            <button class="modal-close" onclick="closeFavoritesModal()">&times;</button>
+        </div>
+        <div class="fav-list" id="fav-list-container"></div>
+    </div>
+</div>
+
 <!-- Скрытый холст для генерации high-res картинки -->
 <div id="export-card" class="theme-obsidian">
     <div class="export-text" id="export-text-content"></div>
@@ -550,6 +602,31 @@
     let typingInterval = null;
     let selectedTheme = "obsidian";
 
+    function getFavorites() {
+        try {
+            return JSON.parse(localStorage.getItem('metaphor_favorites')) || [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveFavorites(list) {
+        localStorage.setItem('metaphor_favorites', JSON.stringify(list));
+        updateFavCountUI();
+    }
+
+    function updateFavCountUI() {
+        const list = getFavorites();
+        document.getElementById('fav-count').innerText = list.length;
+        
+        const btnFav = document.getElementById('btn-fav');
+        if (btnFav && currentText) {
+            const isFav = list.includes(currentText);
+            btnFav.classList.toggle('active', isFav);
+            btnFav.innerText = isFav ? '❤️ В избранном' : '❤️ В избранное';
+        }
+    }
+
     function initDropdowns() {
         const senderSelect = document.getElementById('sender-select');
         senderSelect.innerHTML = "";
@@ -563,6 +640,7 @@
 
         senderSelect.value = "Муж";
         updateRecipientOptions("Жена");
+        updateFavCountUI();
     }
 
     function updateRecipientOptions(preferredRecipient = null) {
@@ -656,6 +734,7 @@
 
             currentText = data.text;
             typeWriter(currentText, 'result-text');
+            updateFavCountUI();
         } catch (error) {
             resultText.innerText = "Слова потерялись в пути. Попробуйте еще раз.";
         }
@@ -678,10 +757,74 @@
                     currentText = item;
                     if (typingInterval) clearInterval(typingInterval);
                     document.getElementById('result-text').innerText = currentText;
+                    updateFavCountUI();
                 };
                 list.appendChild(div);
             });
         }
+    }
+
+    function toggleFavoriteCurrent() {
+        if (!currentText) return;
+        let list = getFavorites();
+        if (list.includes(currentText)) {
+            list = list.filter(t => t !== currentText);
+        } else {
+            list.unshift(currentText);
+        }
+        saveFavorites(list);
+    }
+
+    function openFavoritesModal() {
+        renderFavoritesList();
+        document.getElementById('fav-modal').classList.add('active');
+    }
+
+    function closeFavoritesModal() {
+        document.getElementById('fav-modal').classList.remove('active');
+    }
+
+    function renderFavoritesList() {
+        const container = document.getElementById('fav-list-container');
+        const list = getFavorites();
+        container.innerHTML = "";
+
+        if (list.length === 0) {
+            container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px 0;">У вас пока нет сохраненных метафор</div>';
+            return;
+        }
+
+        list.forEach((text, idx) => {
+            const item = document.createElement('div');
+            item.className = 'fav-item';
+            
+            item.innerHTML = `
+                <div class="fav-item-text">${text}</div>
+                <div class="fav-item-actions">
+                    <button class="btn-tuning" onclick="copyTextDirect(\`${text.replace(/`/g, '\\`')}\`)">Скопировать</button>
+                    <button class="btn-tuning" onclick="openCardWithText(\`${text.replace(/`/g, '\\`')}\`)">Открытка</button>
+                    <button class="btn-tuning" style="border-color: #e25555; color: #e25555;" onclick="deleteFavoriteItem(${idx})">Удалить</button>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function deleteFavoriteItem(index) {
+        let list = getFavorites();
+        list.splice(index, 1);
+        saveFavorites(list);
+        renderFavoritesList();
+    }
+
+    function copyTextDirect(text) {
+        navigator.clipboard.writeText(text).then(() => alert('Скопировано'));
+    }
+
+    function openCardWithText(text) {
+        currentText = text;
+        closeFavoritesModal();
+        openCardModal();
     }
 
     function shareTelegram() {
