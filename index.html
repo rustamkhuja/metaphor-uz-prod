@@ -23,6 +23,7 @@
             --border: #2c2c2e;
             --tg-color: #29a0da;
             --heart-color: #e25555;
+            --audio-color: #9b51e0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,6 +41,39 @@
             text-align: center;
             margin-bottom: 30px;
             position: relative;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .lang-switcher {
+            display: flex;
+            gap: 4px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: var(--bg-color);
         }
 
         h1 { 
@@ -251,6 +285,10 @@
         }
         .btn-tuning:hover { border-color: var(--accent); color: var(--accent); }
 
+        .btn-audio { border-color: var(--audio-color); color: var(--audio-color); }
+        .btn-audio.playing { background: var(--audio-color); color: #fff; }
+        .btn-audio:hover { opacity: 0.9; }
+
         .btn-tg { border-color: var(--tg-color); color: var(--tg-color); }
         .btn-tg:hover { background: var(--tg-color); color: #fff; }
 
@@ -376,8 +414,6 @@
             white-space: pre-wrap;
             max-height: 240px;
             overflow-y: auto;
-            
-            /* Скрываем скроллбар */
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
@@ -390,7 +426,6 @@
             font-weight: 600;
         }
 
-        /* Favorites list inside modal */
         .fav-list { display: flex; flex-direction: column; gap: 12px; }
         .fav-item {
             background: rgba(255,255,255,0.03);
@@ -414,7 +449,6 @@
             justify-content: flex-end;
         }
 
-        /* Card Themes */
         .theme-obsidian { background: #141415 !important; color: #f0ebe1 !important; border: 12px solid #d1a766 !important; }
         .theme-obsidian .preview-logo, .theme-obsidian .export-logo { color: #d1a766 !important; }
 
@@ -424,7 +458,6 @@
         .theme-emerald { background: #091a13 !important; color: #e3efe9 !important; border: 12px solid #529471 !important; }
         .theme-emerald .preview-logo, .theme-emerald .export-logo { color: #529471 !important; }
 
-        /* Export canvas */
         #export-card {
             display: none;
             padding: 60px;
@@ -448,114 +481,71 @@
 
 <div class="container">
     <div class="header-box">
+        <div class="top-bar">
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="changeLang('ru', this)">RU</button>
+                <button class="lang-btn" onclick="changeLang('uz', this)">UZ</button>
+                <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
+            </div>
+            <button class="fav-header-btn" onclick="openFavoritesModal()">
+                ❤️ <span id="lbl-fav-header">Избранное</span> (<span id="fav-count">0</span>)
+            </button>
+        </div>
         <h1>Metaphor</h1>
-        <div class="subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
-        <button class="fav-header-btn" onclick="openFavoritesModal()">
-            ❤️ Избранное (<span id="fav-count">0</span>)
-        </button>
+        <div class="subtitle" id="lbl-subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
     </div>
     
-    <div class="section-title">1. Кто и кому?</div>
+    <div class="section-title" id="sec-1">1. Кто и кому?</div>
     <div class="dropdown-group">
         <div class="dropdown-container">
-            <label class="dropdown-label">От кого:</label>
+            <label class="dropdown-label" id="lbl-sender">От кого:</label>
             <select id="sender-select" class="custom-select" onchange="updateRecipientOptions()"></select>
         </div>
         <div class="dropdown-container">
-            <label class="dropdown-label">Кому:</label>
+            <label class="dropdown-label" id="lbl-recipient">Кому:</label>
             <select id="recipient-select" class="custom-select"></select>
         </div>
     </div>
 
-    <div class="section-title">2. Ситуация и Чувство</div>
-    <div class="cards-grid" id="group-2">
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Тяжелая ссора</div>
-            <div class="card-desc">Гордость мешает сказать «прости»</div>
-        </div>
-        <div class="card active" onclick="selectCard(this)">
-            <div class="card-title">День до венчания</div>
-            <div class="card-desc">Светлая грусть расставания</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">В трудный час</div>
-            <div class="card-desc">Опора, когда опускаются руки</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Выгорание на работе</div>
-            <div class="card-desc">Слова поддержки и веры в силы</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Годовщина</div>
-            <div class="card-desc">Напоминание о пройденном пути</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Неожиданный успех</div>
-            <div class="card-desc">Разделение радости победы</div>
-        </div>
-    </div>
+    <div class="section-title" id="sec-2">2. Ситуация и Чувство</div>
+    <div class="cards-grid" id="group-2"></div>
     
-    <!-- Дополнительная деталь -->
     <input type="text" id="custom-detail" class="custom-input" placeholder="Добавьте точную деталь (необязательно, напр: застряли в лифте, не виделись 5 лет...)">
 
-    <div class="section-title">3. Интонация</div>
-    <div class="cards-grid" id="group-3">
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Восточная классика</div>
-            <div class="card-desc">Метафоры Навои и Фирдоуси</div>
-        </div>
-        <div class="card active" onclick="selectCard(this)">
-            <div class="card-title">Западная драма</div>
-            <div class="card-desc">Стиль «Ромео и Джульетты»</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Современный эпос</div>
-            <div class="card-desc">Монументально, без пафоса</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Ирония и Юмор</div>
-            <div class="card-desc">Тепло, легко и с ухмылкой</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Поэзия и Стихи</div>
-            <div class="card-desc">Ритмичные строки в рифму</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Философский мыслитель</div>
-            <div class="card-desc">Глубокие размышления о вечном</div>
-        </div>
-    </div>
+    <div class="section-title" id="sec-3">3. Интонация</div>
+    <div class="cards-grid" id="group-3"></div>
 
-    <button class="btn-main" onclick="generateText()">Создать слова</button>
+    <button class="btn-main" id="btn-generate" onclick="generateText()">Создать слова</button>
 
     <div class="phone-mockup" id="phone-mockup">
         <div id="result-section">
             <div id="result-text"></div>
             <div class="result-actions" id="tuning-bar">
-                <button class="btn-tuning" onclick="tuneText('Сделай короче')">Короче</button>
-                <button class="btn-tuning" onclick="tuneText('Добавь больше метафор')">Метафоры</button>
-                <button class="btn-tuning" onclick="tuneText('Смени стиль на более формальный')">Более формально</button>
+                <button class="btn-tuning" id="btn-shorter" onclick="tuneText('Сделай короче')">Короче</button>
+                <button class="btn-tuning" id="btn-more-metaphors" onclick="tuneText('Добавь больше метафор')">Метафоры</button>
+                <button class="btn-tuning" id="btn-more-formal" onclick="tuneText('Смени стиль на более формальный')">Более формально</button>
             </div>
             <div class="result-actions" style="margin-top: 15px;">
+                <button class="btn-tuning btn-audio" id="btn-speech" onclick="toggleSpeech()">🔊 Прослушать</button>
                 <button class="btn-tuning btn-fav" id="btn-fav" onclick="toggleFavoriteCurrent()">❤️ В избранное</button>
                 <button class="btn-tuning btn-tg" onclick="shareTelegram()">В Telegram</button>
-                <button class="btn-tuning" onclick="copyResult()">Скопировать</button>
-                <button class="btn-tuning" onclick="openCardModal()">Скачать открытку</button>
+                <button class="btn-tuning" id="btn-copy" onclick="copyResult()">Скопировать</button>
+                <button class="btn-tuning" id="btn-card" onclick="openCardModal()">Скачать открытку</button>
             </div>
             
             <div class="versions-section" id="versions-container" style="display: none;">
-                <div class="versions-title">Предыдущие версии:</div>
+                <div class="versions-title" id="lbl-prev-versions">Предыдущие версии:</div>
                 <div id="versions-list"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Модальное окно конструктора открытки -->
+<!-- Модальное окно открытки -->
 <div class="modal-overlay" id="card-modal">
     <div class="modal-body">
         <div class="modal-header">
-            <h3>Создание открытки</h3>
+            <h3 id="lbl-card-modal-title">Создание открытки</h3>
             <button class="modal-close" onclick="closeCardModal()">&times;</button>
         </div>
         <div class="theme-selector">
@@ -569,7 +559,7 @@
                 <div class="preview-logo">METAPHOR</div>
             </div>
         </div>
-        <button class="btn-main" style="margin-top: 0;" onclick="downloadCardImage()">Скачать PNG</button>
+        <button class="btn-main" style="margin-top: 0;" id="btn-download-png" onclick="downloadCardImage()">Скачать PNG</button>
     </div>
 </div>
 
@@ -577,57 +567,195 @@
 <div class="modal-overlay" id="fav-modal">
     <div class="modal-body">
         <div class="modal-header">
-            <h3>Сохраненные метафоры</h3>
+            <h3 id="lbl-fav-modal-title">Сохраненные метафоры</h3>
             <button class="modal-close" onclick="closeFavoritesModal()">&times;</button>
         </div>
         <div class="fav-list" id="fav-list-container"></div>
     </div>
 </div>
 
-<!-- Скрытый холст для генерации high-res картинки -->
+<!-- Скрытый холст -->
 <div id="export-card" class="theme-obsidian">
     <div class="export-text" id="export-text-content"></div>
     <div class="export-logo">METAPHOR</div>
 </div>
 
 <script>
-    const roles = [
-        "Парень", "Девушка", "Муж", "Жена", 
-        "Отец", "Мать", "Сын", "Дочь", 
-        "Друг", "Подруга", "Коллега", "Наставник", "Команда"
-    ];
+    let currentLang = 'ru';
+
+    const translations = {
+        ru: {
+            subtitle: "Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.",
+            favHeader: "Избранное",
+            sec1: "1. Кто и кому?",
+            sec2: "2. Ситуация и Чувство",
+            sec3: "3. Интонация",
+            lblSender: "От кого:",
+            lblRecipient: "Кому:",
+            placeholderDetail: "Добавьте точную деталь (необязательно, напр: застряли в лифте, не виделись 5 лет...)",
+            btnGenerate: "Создать слова",
+            btnShorter: "Короче",
+            btnMoreMetaphors: "Метафоры",
+            btnMoreFormal: "Более формально",
+            btnListen: "🔊 Прослушать",
+            btnStopListen: "⏹ Остановить",
+            btnFavAdd: "❤️ В избранное",
+            btnFavRemove: "❤️ В избранном",
+            btnCopy: "Скопировать",
+            btnCard: "Скачать открытку",
+            lblPrevVersions: "Предыдущие версии:",
+            lblCardModalTitle: "Создание открытки",
+            btnDownloadPng: "Скачать PNG",
+            lblFavModalTitle: "Сохраненные метафоры",
+            emptyFav: "У вас пока нет сохраненных метафор",
+            roles: ["Парень", "Девушка", "Муж", "Жена", "Отец", "Мать", "Сын", "Дочь", "Друг", "Подруга", "Коллега", "Наставник", "Команда"],
+            group2: [
+                { title: "Тяжелая ссора", desc: "Гордость мешает сказать «прости»" },
+                { title: "День до венчания", desc: "Светлая грусть расставания" },
+                { title: "В трудный час", desc: "Опора, когда опускаются руки" },
+                { title: "Выгорание на работе", desc: "Слова поддержки и веры в силы" },
+                { title: "Годовщина", desc: "Напоминание о пройденном пути" },
+                { title: "Неожиданный успех", desc: "Разделение радости победы" }
+            ],
+            group3: [
+                { title: "Восточная классика", desc: "Метафоры Навои и Фирдоуси" },
+                { title: "Западная драма", desc: "Стиль «Ромео и Джульетты»" },
+                { title: "Современный эпос", desc: "Монументально, без пафоса" },
+                { title: "Ирония и Юмор", desc: "Тепло, легко и с ухмылкой" },
+                { title: "Поэзия и Стихи", desc: "Ритмичные строки в рифму" },
+                { title: "Философский мыслитель", desc: "Глубокие размышления о вечном" }
+            ]
+        },
+        uz: {
+            subtitle: "Yuragingizdagi izhorlar uchun eng go'zal tashbehlar va so'zlar.",
+            favHeader: "Saralanganlar",
+            sec1: "1. Kimdan va kimga?",
+            sec2: "2. Vaziyat va Tuzg'u",
+            sec3: "3. Ohang va Uslub",
+            lblSender: "Kimdan:",
+            lblRecipient: "Kimga:",
+            placeholderDetail: "Aniq tafsilot qo'shing (ixtiyoriy, masalan: 5 yil ko'rishmadik, birga liftda qolib ketdik...)",
+            btnGenerate: "Izhor Yaratish",
+            btnShorter: "Qisqaroq",
+            btnMoreMetaphors: "Ko'proq tashbeh",
+            btnMoreFormal: "Rasmiyroq",
+            btnListen: "🔊 Tinglash",
+            btnStopListen: "⏹ To'xtatish",
+            btnFavAdd: "❤️ Saqlash",
+            btnFavRemove: "❤️ Saqlangan",
+            btnCopy: "Nusxalash",
+            btnCard: "Ochiqxona yuklash",
+            lblPrevVersions: "Oldingi versiyalar:",
+            lblCardModalTitle: "Ochratka yaratish",
+            btnDownloadPng: "PNG yuklab olish",
+            lblFavModalTitle: "Saqlangan izhorlar",
+            emptyFav: "Sizda hali saqlangan izhorlar yo'q",
+            roles: ["Yigit", "Qiz", "Eri", "Xotini", "Ota", "Ona", "O'g'il", "Qiz farzand", "Do'st", "Dugona", "Hamkasb", "Ustoz", "Jamoa"],
+            group2: [
+                { title: "O'rtadagi gina", desc: "Kibr «kechiring» deyishga yo'l qo'ymaydi" },
+                { title: "To'y arafasida", desc: "Ayriliq va yangi hayot oldidagi hayajon" },
+                { title: "Og'ir damlarda", desc: "Umid va ruhiy tirak bo'luvchi so'zlar" },
+                { title: "Charchoq va tushkunlik", desc: "Ishdagi qiyinchilikda dalda berish" },
+                { title: "Yillik sana", desc: "Birga bosib o'tilgan yo'l xotirasi" },
+                { title: "Kutilmagan g'alaba", desc: "Muvaffaqiyat quvonchini baham ko'rish" }
+            ],
+            group3: [
+                { title: "Sharq mumtoz g'azali", desc: "Navoiy va Bobur merosi, baytlar" },
+                { title: "G'arbiy drama", desc: "«Romeo va Julyetta» uslubi" },
+                { title: "Zamonaviy epos", desc: "Salobatli va ta'sirchan so'zlar" },
+                { title: "Samimiy yumor", desc: "Yengil tabassum va tabassum bilan" },
+                { title: "She'riy qafas", desc: "Qofiyali va ritmli satrlar" },
+                { title: "Falsafiy teranlik", desc: "Hayot va segi haqida chuqur fikrlar" }
+            ]
+        },
+        en: {
+            subtitle: "The exact words you were looking for. Choose a situation and tone.",
+            favHeader: "Saved",
+            sec1: "1. From whom to whom?",
+            sec2: "2. Situation & Feeling",
+            sec3: "3. Tone & Style",
+            lblSender: "From:",
+            lblRecipient: "To:",
+            placeholderDetail: "Add a specific detail (optional, e.g. stuck in an elevator, haven't met in 5 years...)",
+            btnGenerate: "Craft Words",
+            btnShorter: "Shorter",
+            btnMoreMetaphors: "More Metaphors",
+            btnMoreFormal: "More Formal",
+            btnListen: "🔊 Listen",
+            btnStopListen: "⏹ Stop",
+            btnFavAdd: "❤️ Save",
+            btnFavRemove: "❤️ Saved",
+            btnCopy: "Copy",
+            btnCard: "Download Card",
+            lblPrevVersions: "Previous versions:",
+            lblCardModalTitle: "Card Constructor",
+            btnDownloadPng: "Download PNG",
+            lblFavModalTitle: "Saved Metaphors",
+            emptyFav: "No saved metaphors yet",
+            roles: ["Boyfriend", "Girlfriend", "Husband", "Wife", "Father", "Mother", "Son", "Daughter", "Friend (Male)", "Friend (Female)", "Colleague", "Mentor", "Team"],
+            group2: [
+                { title: "Heated Argument", desc: "When pride stops you from saying sorry" },
+                { title: "Eve of Wedding", desc: "Bittersweet feeling of a new chapter" },
+                { title: "Hard Times", desc: "Strong support when feeling lost" },
+                { title: "Work Burnout", desc: "Words of hope and belief in them" },
+                { title: "Anniversary", desc: "Reflecting on the journey together" },
+                { title: "Unexpected Success", desc: "Sharing pure joy of victory" }
+            ],
+            group3: [
+                { title: "Eastern Classics", desc: "Rich poetic metaphors of the East" },
+                { title: "Western Drama", desc: "Romantic 'Romeo & Juliet' style" },
+                { title: "Modern Epic", desc: "Deeply emotional, solemn tone" },
+                { title: "Warm Irony", desc: "Lighthearted, playful yet loving" },
+                { title: "Poetic Verse", desc: "Rhymed, rhythmic romantic poetic lines" },
+                { title: "Philosophical", desc: "Profound thoughts about life and soul" }
+            ]
+        }
+    };
 
     let currentText = "";
     let textHistory = [];
     let typingInterval = null;
     let selectedTheme = "obsidian";
+    let isSpeaking = false;
 
-    function getFavorites() {
-        try {
-            return JSON.parse(localStorage.getItem('metaphor_favorites')) || [];
-        } catch (e) {
-            return [];
-        }
+    function changeLang(lang, btnElement) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        if (btnElement) btnElement.classList.add('active');
+        applyTranslations();
     }
 
-    function saveFavorites(list) {
-        localStorage.setItem('metaphor_favorites', JSON.stringify(list));
+    function applyTranslations() {
+        const t = translations[currentLang];
+
+        document.getElementById('lbl-subtitle').innerText = t.subtitle;
+        document.getElementById('lbl-fav-header').innerText = t.favHeader;
+        document.getElementById('sec-1').innerText = t.sec1;
+        document.getElementById('sec-2').innerText = t.sec2;
+        document.getElementById('sec-3').innerText = t.sec3;
+        document.getElementById('lbl-sender').innerText = t.lblSender;
+        document.getElementById('lbl-recipient').innerText = t.lblRecipient;
+        document.getElementById('custom-detail').placeholder = t.placeholderDetail;
+        document.getElementById('btn-generate').innerText = t.btnGenerate;
+        document.getElementById('btn-shorter').innerText = t.btnShorter;
+        document.getElementById('btn-more-metaphors').innerText = t.btnMoreMetaphors;
+        document.getElementById('btn-more-formal').innerText = t.btnMoreFormal;
+        document.getElementById('btn-copy').innerText = t.btnCopy;
+        document.getElementById('btn-card').innerText = t.btnCard;
+        document.getElementById('lbl-prev-versions').innerText = t.lblPrevVersions;
+        document.getElementById('lbl-card-modal-title').innerText = t.lblCardModalTitle;
+        document.getElementById('btn-download-png').innerText = t.btnDownloadPng;
+        document.getElementById('lbl-fav-modal-title').innerText = t.lblFavModalTitle;
+
+        renderDropdowns();
+        renderCards('group-2', t.group2);
+        renderCards('group-3', t.group3);
         updateFavCountUI();
+        updateSpeechBtnUI();
     }
 
-    function updateFavCountUI() {
-        const list = getFavorites();
-        document.getElementById('fav-count').innerText = list.length;
-        
-        const btnFav = document.getElementById('btn-fav');
-        if (btnFav && currentText) {
-            const isFav = list.includes(currentText);
-            btnFav.classList.toggle('active', isFav);
-            btnFav.innerText = isFav ? '❤️ В избранном' : '❤️ В избранное';
-        }
-    }
-
-    function initDropdowns() {
+    function renderDropdowns() {
+        const roles = translations[currentLang].roles;
         const senderSelect = document.getElementById('sender-select');
         senderSelect.innerHTML = "";
         
@@ -638,12 +766,12 @@
             senderSelect.appendChild(opt);
         });
 
-        senderSelect.value = "Муж";
-        updateRecipientOptions("Жена");
-        updateFavCountUI();
+        senderSelect.value = roles[2] || roles[0]; // Husband/Eri
+        updateRecipientOptions(roles[3] || roles[1]); // Wife/Xotini
     }
 
     function updateRecipientOptions(preferredRecipient = null) {
+        const roles = translations[currentLang].roles;
         const senderSelect = document.getElementById('sender-select');
         const recipientSelect = document.getElementById('recipient-select');
         const selectedSender = senderSelect.value;
@@ -664,12 +792,50 @@
         });
     }
 
-    window.onload = initDropdowns;
+    function renderCards(containerId, items) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+
+        items.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'card' + (index === 1 ? ' active' : '');
+            div.onclick = () => selectCard(div);
+            div.innerHTML = `
+                <div class="card-title">${item.title}</div>
+                <div class="card-desc">${item.desc}</div>
+            `;
+            container.appendChild(div);
+        });
+    }
 
     function selectCard(cardElement) {
         const grid = cardElement.parentElement;
         grid.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
         cardElement.classList.add('active');
+    }
+
+    function getFavorites() {
+        try {
+            return JSON.parse(localStorage.getItem('metaphor_favorites')) || [];
+        } catch (e) { return []; }
+    }
+
+    function saveFavorites(list) {
+        localStorage.setItem('metaphor_favorites', JSON.stringify(list));
+        updateFavCountUI();
+    }
+
+    function updateFavCountUI() {
+        const list = getFavorites();
+        document.getElementById('fav-count').innerText = list.length;
+        
+        const btnFav = document.getElementById('btn-fav');
+        const t = translations[currentLang];
+        if (btnFav && currentText) {
+            const isFav = list.includes(currentText);
+            btnFav.classList.toggle('active', isFav);
+            btnFav.innerText = isFav ? t.btnFavRemove : t.btnFavAdd;
+        }
     }
 
     function typeWriter(text, elementId, speed = 25) {
@@ -692,9 +858,10 @@
         const resultText = document.getElementById('result-text');
         const phoneMockup = document.getElementById('phone-mockup');
         
+        stopSpeech();
         if (typingInterval) clearInterval(typingInterval);
         phoneMockup.style.display = 'block';
-        resultText.innerText = "Генерируем...";
+        resultText.innerText = currentLang === 'uz' ? "Izhor yaratilmoqda..." : (currentLang === 'en' ? "Crafting words..." : "Генерируем...");
 
         const sender = document.getElementById('sender-select').value;
         const recipient = document.getElementById('recipient-select').value;
@@ -705,7 +872,7 @@
         
         let fullSituation = baseSituation;
         if (customDetail) {
-            fullSituation += ` (Важная деталь: ${customDetail})`;
+            fullSituation += ` (Деталь: ${customDetail})`;
         }
         if (modifier) {
             fullSituation += ` [Модификация: ${modifier}]`;
@@ -716,7 +883,8 @@
         const payload = {
             step1: active1,
             step2: fullSituation,
-            step3: "Тон: " + active3
+            step3: "Тон: " + active3,
+            lang: currentLang
         };
 
         try {
@@ -736,7 +904,7 @@
             typeWriter(currentText, 'result-text');
             updateFavCountUI();
         } catch (error) {
-            resultText.innerText = "Слова потерялись в пути. Попробуйте еще раз.";
+            resultText.innerText = currentLang === 'uz' ? "Xatolik yuz berdi. Qayta urinib ko'ring." : "Слова потерялись в пути. Попробуйте еще раз.";
         }
     }
 
@@ -755,12 +923,75 @@
                 div.innerText = item.length > 60 ? item.substring(0, 60) + '...' : item;
                 div.onclick = () => {
                     currentText = item;
+                    stopSpeech();
                     if (typingInterval) clearInterval(typingInterval);
                     document.getElementById('result-text').innerText = currentText;
                     updateFavCountUI();
                 };
                 list.appendChild(div);
             });
+        }
+    }
+
+    /* Text to Speech (Audio) */
+    function toggleSpeech() {
+        if (isSpeaking) {
+            stopSpeech();
+        } else {
+            startSpeech();
+        }
+    }
+
+    function startSpeech() {
+        if (!currentText || !('speechSynthesis' in window)) return;
+        
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(currentText);
+        const langCodeMap = { ru: 'ru-RU', uz: 'uz-UZ', en: 'en-US' };
+        utterance.lang = langCodeMap[currentLang] || 'ru-RU';
+        
+        utterance.rate = 0.9;  // Атмосферный замедленный темп
+        utterance.pitch = 0.95; // Теплый мягкий тон
+
+        const voices = window.speechSynthesis.getVoices();
+        const matchedVoice = voices.find(v => v.lang.startsWith(utterance.lang.slice(0, 2)));
+        if (matchedVoice) utterance.voice = matchedVoice;
+
+        utterance.onend = () => {
+            isSpeaking = false;
+            updateSpeechBtnUI();
+        };
+
+        utterance.onerror = () => {
+            isSpeaking = false;
+            updateSpeechBtnUI();
+        };
+
+        isSpeaking = true;
+        updateSpeechBtnUI();
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function stopSpeech() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+        isSpeaking = false;
+        updateSpeechBtnUI();
+    }
+
+    function updateSpeechBtnUI() {
+        const btn = document.getElementById('btn-speech');
+        const t = translations[currentLang];
+        if (!btn) return;
+        
+        if (isSpeaking) {
+            btn.classList.add('playing');
+            btn.innerText = t.btnStopListen;
+        } else {
+            btn.classList.remove('playing');
+            btn.innerText = t.btnListen;
         }
     }
 
@@ -787,10 +1018,11 @@
     function renderFavoritesList() {
         const container = document.getElementById('fav-list-container');
         const list = getFavorites();
+        const t = translations[currentLang];
         container.innerHTML = "";
 
         if (list.length === 0) {
-            container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px 0;">У вас пока нет сохраненных метафор</div>';
+            container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px 0;">${t.emptyFav}</div>`;
             return;
         }
 
@@ -801,9 +1033,9 @@
             item.innerHTML = `
                 <div class="fav-item-text">${text}</div>
                 <div class="fav-item-actions">
-                    <button class="btn-tuning" onclick="copyTextDirect(\`${text.replace(/`/g, '\\`')}\`)">Скопировать</button>
-                    <button class="btn-tuning" onclick="openCardWithText(\`${text.replace(/`/g, '\\`')}\`)">Открытка</button>
-                    <button class="btn-tuning" style="border-color: #e25555; color: #e25555;" onclick="deleteFavoriteItem(${idx})">Удалить</button>
+                    <button class="btn-tuning" onclick="copyTextDirect(\`${text.replace(/`/g, '\\`')}\`)">${t.btnCopy}</button>
+                    <button class="btn-tuning" onclick="openCardWithText(\`${text.replace(/`/g, '\\`')}\`)">${t.btnCard}</button>
+                    <button class="btn-tuning" style="border-color: #e25555; color: #e25555;" onclick="deleteFavoriteItem(${idx})">✕</button>
                 </div>
             `;
             container.appendChild(item);
@@ -818,7 +1050,7 @@
     }
 
     function copyTextDirect(text) {
-        navigator.clipboard.writeText(text).then(() => alert('Скопировано'));
+        navigator.clipboard.writeText(text).then(() => alert('Copied'));
     }
 
     function openCardWithText(text) {
@@ -835,11 +1067,10 @@
 
     function copyResult() {
         navigator.clipboard.writeText(currentText).then(() => {
-            alert('Текст скопирован в буфер обмена');
+            alert('OK');
         });
     }
 
-    /* Modal & Card Theme Functions */
     function openCardModal() {
         if (!currentText) return;
         document.getElementById('modal-preview-text').innerText = currentText;
@@ -873,6 +1104,10 @@
             exportCard.style.display = 'none';
         });
     }
+
+    window.onload = () => {
+        applyTranslations();
+    };
 </script>
 </body>
 </html>
