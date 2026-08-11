@@ -1,6 +1,60 @@
+// Временное хранилище IP-адресов и их активности для Rate Limiting
+const rateLimitMap = new Map();
+
+/**
+ * Функция проверки лимита запросов (Rate Limit)
+ * @param {string} ip - IP-адрес пользователя
+ * @param {number} limit - Максимум запросов за окно времени (по умолчанию 5)
+ * @param {number} windowMs - Окно времени в миллисекундах (по умолчанию 1 минута)
+ */
+function checkRateLimit(ip, limit = 5, windowMs = 60 * 1000) {
+    const now = Date.now();
+    const record = rateLimitMap.get(ip) || { count: 0, resetTime: now + windowMs };
+
+    // Если время окна истекло, сбрасываем счетчик
+    if (now > record.resetTime) {
+        record.count = 1;
+        record.resetTime = now + windowMs;
+    } else {
+        record.count += 1;
+    }
+
+    rateLimitMap.set(ip, record);
+
+    // Очистка устаревших IP-адресов из памяти при разрастании Map
+    if (rateLimitMap.size > 5000) {
+        for (const [key, value] of rateLimitMap.entries()) {
+            if (now > value.resetTime) rateLimitMap.delete(key);
+        }
+    }
+
+    if (record.count > limit) {
+        const retryAfterSeconds = Math.ceil((record.resetTime - now) / 1000);
+        return { limited: true, retryAfterSeconds };
+    }
+
+    return { limited: false };
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
+    }
+
+    // Определяем IP-адрес клиента (с учетом прокси Vercel / Cloudflare)
+    const clientIp = 
+        req.headers['x-forwarded-for']?.split(',')[0] || 
+        req.headers['x-real-ip'] || 
+        req.socket.remoteAddress || 
+        '127.0.0.1';
+
+    // Проверяем лимит: максимум 5 запросов в 1 минуту с одного IP
+    const { limited, retryAfterSeconds } = checkRateLimit(clientIp, 5, 60 * 1000);
+
+    if (limited) {
+        return res.status(429).json({ 
+            text: `Слишком много запросов. Пожалуйста, подождите ${retryAfterSeconds} сек.` 
+        });
     }
 
     const { step1, step2, step3, lang = 'ru' } = req.body;
@@ -10,7 +64,7 @@ export default async function handler(req, res) {
         return res.status(500).json({ text: "Ключ GROQ_API_KEY не найден в переменных окружения." });
     }
 
-    // Определение языка генерации
+    // Определение целевого языка
     const languageMap = {
         ru: 'Русский',
         uz: 'Узбекский',
@@ -18,9 +72,9 @@ export default async function handler(req, res) {
     };
     const targetLanguage = languageMap[lang] || 'Русский';
 
-    // Разделение на системную роль и пользовательский ввод для точного соблюдения ограничений
+    // Системный промпт для строгого соблюдения правил вывода
     const systemPrompt = `Ты — профессиональный писатель и копирайтер. 
-Твоя задача — создавать искренние, точные сообщения строго на указанном языке.
+Твоя задача — создавать искренние, точно выраженные сообщения строго на указанном языке.
 
 СТРОГИЕ ПРАВИЛА:
 1. Выдавай ТОЛЬКО финальный текст сообщения.
