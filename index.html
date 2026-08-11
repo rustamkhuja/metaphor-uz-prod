@@ -58,6 +58,27 @@
             margin-top: 30px; 
         }
 
+        .dropdown-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .dropdown-container {
+            flex: 1;
+        }
+
+        .dropdown-label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .dropdown-group { flex-direction: column; gap: 0; }
+        }
+
         .custom-select {
             width: 100%;
             padding: 16px;
@@ -74,7 +95,7 @@
             background-position: right 16px top 50%;
             background-size: 12px auto;
             transition: 0.3s;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .custom-select:focus {
@@ -256,13 +277,16 @@
     <div class="subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
     
     <div class="section-title">1. Кто и кому?</div>
-    <select id="step1-select" class="custom-select">
-        <option value="Парень ➔ Девушке">Парень ➔ Девушке (Романтика, примирение)</option>
-        <option value="Отец ➔ Дочери">Отец ➔ Дочери (Наставление, забота)</option>
-        <option value="Наставник ➔ Команде">Наставник ➔ Команде (Мотивация, поддержка)</option>
-        <option value="Коллега ➔ Коллеге">Коллега ➔ Коллеге (Благодарность, прощание)</option>
-        <option value="Друг ➔ Другу">Друг ➔ Другу (Душевная беседа)</option>
-    </select>
+    <div class="dropdown-group">
+        <div class="dropdown-container">
+            <label class="dropdown-label">От кого:</label>
+            <select id="sender-select" class="custom-select" onchange="updateRecipientOptions()"></select>
+        </div>
+        <div class="dropdown-container">
+            <label class="dropdown-label">Кому:</label>
+            <select id="recipient-select" class="custom-select"></select>
+        </div>
+    </div>
 
     <div class="section-title">2. Ситуация и Чувство</div>
     <div class="cards-grid" id="group-2">
@@ -337,8 +361,54 @@
 </div>
 
 <script>
+    const roles = [
+        "Парень", "Девушка", "Муж", "Жена", 
+        "Отец", "Мать", "Сын", "Дочь", 
+        "Друг", "Подруга", "Коллега", "Наставник", "Команда"
+    ];
+
     let currentText = "";
     let textHistory = [];
+
+    function initDropdowns() {
+        const senderSelect = document.getElementById('sender-select');
+        senderSelect.innerHTML = "";
+        
+        roles.forEach(role => {
+            const opt = document.createElement('option');
+            opt.value = role;
+            opt.textContent = role;
+            senderSelect.appendChild(opt);
+        });
+
+        // По умолчанию выбираем Муж
+        senderSelect.value = "Муж";
+        updateRecipientOptions("Жена");
+    }
+
+    function updateRecipientOptions(preferredRecipient = null) {
+        const senderSelect = document.getElementById('sender-select');
+        const recipientSelect = document.getElementById('recipient-select');
+        const selectedSender = senderSelect.value;
+        const previousRecipient = preferredRecipient || recipientSelect.value;
+
+        recipientSelect.innerHTML = "";
+
+        roles.forEach(role => {
+            if (role !== selectedSender) {
+                const opt = document.createElement('option');
+                opt.value = role;
+                opt.textContent = role;
+                if (role === previousRecipient) {
+                    opt.selected = true;
+                }
+                recipientSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Инициализация при загрузке страницы
+    window.onload = initDropdowns;
 
     function selectCard(cardElement) {
         const grid = cardElement.parentElement;
@@ -353,7 +423,10 @@
         phoneMockup.style.display = 'block';
         resultText.innerText = "Генерируем...";
 
-        const active1 = document.getElementById('step1-select').value;
+        const sender = document.getElementById('sender-select').value;
+        const recipient = document.getElementById('recipient-select').value;
+        const active1 = `${sender} ➔ ${recipient}`;
+
         const active2 = document.querySelector('#group-2 .card.active .card-title').innerText;
         const active3 = document.querySelector('#group-3 .card.active .card-title').innerText;
 
