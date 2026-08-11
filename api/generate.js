@@ -24,7 +24,7 @@ export default async function handler(req, res) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "llama3-8b-8192",
+                model: "llama-3.1-8b-instant",
                 messages: [{ role: "user", content: prompt }]
             })
         });
@@ -33,6 +33,8 @@ export default async function handler(req, res) {
         
         if (data.choices && data.choices.length > 0) {
             res.status(200).json({ text: data.choices[0].message.content.trim() });
+        } else if (data.error && data.error.message) {
+            res.status(500).json({ text: `Ошибка Groq: ${data.error.message}` });
         } else {
             res.status(500).json({ text: "Ошибка при генерации текста. Попробуйте еще раз." });
         }
