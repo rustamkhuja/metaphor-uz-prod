@@ -21,6 +21,7 @@
             --text-main: #f0ebe1;
             --text-muted: #8e8e93;
             --border: #2c2c2e;
+            --tg-color: #29a0da;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,9 +65,7 @@
             margin-bottom: 20px;
         }
 
-        .dropdown-container {
-            flex: 1;
-        }
+        .dropdown-container { flex: 1; }
 
         .dropdown-label {
             display: block;
@@ -79,7 +78,7 @@
             .dropdown-group { flex-direction: column; gap: 0; }
         }
 
-        .custom-select {
+        .custom-select, .custom-input {
             width: 100%;
             padding: 16px;
             background: var(--surface);
@@ -88,32 +87,34 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             border-radius: 4px;
+            transition: 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .custom-select {
             cursor: pointer;
             appearance: none; 
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d1a766%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat;
             background-position: right 16px top 50%;
             background-size: 12px auto;
-            transition: 0.3s;
-            margin-bottom: 12px;
         }
 
-        .custom-select:focus {
+        .custom-input::placeholder { color: var(--text-muted); opacity: 0.6; }
+
+        .custom-select:focus, .custom-input:focus {
             border-color: var(--accent);
             outline: none;
             box-shadow: 0 0 0 1px var(--accent);
         }
 
-        .custom-select option {
-            background: var(--surface);
-            color: var(--text-main);
-        }
+        .custom-select option { background: var(--surface); color: var(--text-main); }
 
         .cards-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
             gap: 12px; 
-            margin-bottom: 20px; 
+            margin-bottom: 12px; 
         }
 
         @media (max-width: 600px) {
@@ -201,6 +202,7 @@
             color: var(--text-main); 
             margin-bottom: 20px; 
             white-space: pre-wrap; 
+            min-height: 80px;
         }
 
         .result-actions { 
@@ -222,6 +224,15 @@
             transition: 0.3s; 
         }
         .btn-tuning:hover { border-color: var(--accent); color: var(--accent); }
+
+        .btn-tg {
+            border-color: var(--tg-color);
+            color: var(--tg-color);
+        }
+        .btn-tg:hover {
+            background: var(--tg-color);
+            color: #fff;
+        }
 
         .versions-section {
             margin-top: 25px;
@@ -315,6 +326,9 @@
             <div class="card-desc">Разделение радости победы</div>
         </div>
     </div>
+    
+    <!-- Дополнительная деталь -->
+    <input type="text" id="custom-detail" class="custom-input" placeholder="Добавьте точную деталь (необязательно, напр: застряли в лифте, не виделись 5 лет...)">
 
     <div class="section-title">3. Интонация</div>
     <div class="cards-grid" id="group-3">
@@ -330,6 +344,18 @@
             <div class="card-title">Современный эпос</div>
             <div class="card-desc">Монументально, без пафоса</div>
         </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Ирония и Юмор</div>
+            <div class="card-desc">Тепло, легко и с ухмылкой</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Поэзия и Стихи</div>
+            <div class="card-desc">Ритмичные строки в рифму</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Философский мыслитель</div>
+            <div class="card-desc">Глубокие размышления о вечном</div>
+        </div>
     </div>
 
     <button class="btn-main" onclick="generateText()">Создать слова</button>
@@ -343,7 +369,8 @@
                 <button class="btn-tuning" onclick="tuneText('Смени стиль на более формальный')">Более формально</button>
             </div>
             <div class="result-actions" style="margin-top: 15px;">
-                <button class="btn-tuning" onclick="copyResult()">Скопировать текст</button>
+                <button class="btn-tuning btn-tg" onclick="shareTelegram()">В Telegram</button>
+                <button class="btn-tuning" onclick="copyResult()">Скопировать</button>
                 <button class="btn-tuning" onclick="exportAsImage()">Скачать открытку</button>
             </div>
             
@@ -369,6 +396,7 @@
 
     let currentText = "";
     let textHistory = [];
+    let typingInterval = null;
 
     function initDropdowns() {
         const senderSelect = document.getElementById('sender-select');
@@ -381,7 +409,6 @@
             senderSelect.appendChild(opt);
         });
 
-        // По умолчанию выбираем Муж
         senderSelect.value = "Муж";
         updateRecipientOptions("Жена");
     }
@@ -407,7 +434,6 @@
         });
     }
 
-    // Инициализация при загрузке страницы
     window.onload = initDropdowns;
 
     function selectCard(cardElement) {
@@ -416,10 +442,28 @@
         cardElement.classList.add('active');
     }
 
+    // Эффект печатающегося текста (Typewriter)
+    function typeWriter(text, elementId, speed = 25) {
+        const el = document.getElementById(elementId);
+        el.innerText = "";
+        let i = 0;
+        if (typingInterval) clearInterval(typingInterval);
+
+        typingInterval = setInterval(() => {
+            if (i < text.length) {
+                el.innerText += text.charAt(i);
+                i++;
+            } else {
+                clearInterval(typingInterval);
+            }
+        }, speed);
+    }
+
     async function generateText(modifier = "") {
         const resultText = document.getElementById('result-text');
         const phoneMockup = document.getElementById('phone-mockup');
         
+        if (typingInterval) clearInterval(typingInterval);
         phoneMockup.style.display = 'block';
         resultText.innerText = "Генерируем...";
 
@@ -427,12 +471,22 @@
         const recipient = document.getElementById('recipient-select').value;
         const active1 = `${sender} ➔ ${recipient}`;
 
-        const active2 = document.querySelector('#group-2 .card.active .card-title').innerText;
+        const baseSituation = document.querySelector('#group-2 .card.active .card-title').innerText;
+        const customDetail = document.getElementById('custom-detail').value.trim();
+        
+        let fullSituation = baseSituation;
+        if (customDetail) {
+            fullSituation += ` (Важная деталь: ${customDetail})`;
+        }
+        if (modifier) {
+            fullSituation += ` [Модификация: ${modifier}]`;
+        }
+
         const active3 = document.querySelector('#group-3 .card.active .card-title').innerText;
 
         const payload = {
             step1: active1,
-            step2: active2 + (modifier ? ` [Модификация: ${modifier}]` : ""),
+            step2: fullSituation,
             step3: "Тон: " + active3
         };
 
@@ -450,7 +504,7 @@
             }
 
             currentText = data.text;
-            resultText.innerText = currentText;
+            typeWriter(currentText, 'result-text');
         } catch (error) {
             resultText.innerText = "Слова потерялись в пути. Попробуйте еще раз.";
         }
@@ -471,11 +525,18 @@
                 div.innerText = item.length > 60 ? item.substring(0, 60) + '...' : item;
                 div.onclick = () => {
                     currentText = item;
+                    if (typingInterval) clearInterval(typingInterval);
                     document.getElementById('result-text').innerText = currentText;
                 };
                 list.appendChild(div);
             });
         }
+    }
+
+    function shareTelegram() {
+        if (!currentText) return;
+        const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(currentText)}`;
+        window.open(url, '_blank');
     }
 
     function copyResult() {
