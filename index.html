@@ -11,7 +11,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
-    <!-- Библиотека для создания изображений -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
@@ -57,6 +56,36 @@
             font-size: 1.1rem; 
             margin-bottom: 15px; 
             margin-top: 30px; 
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            cursor: pointer;
+            appearance: none; 
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d1a766%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px top 50%;
+            background-size: 12px auto;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .custom-select:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        .custom-select option {
+            background: var(--surface);
+            color: var(--text-main);
         }
 
         .cards-grid { 
@@ -226,24 +255,15 @@
     <h1>Metaphor</h1>
     <div class="subtitle">Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.</div>
     
-    <!-- 1. Кто и кому -->
     <div class="section-title">1. Кто и кому?</div>
-    <div class="cards-grid" id="group-1">
-        <div class="card active" onclick="selectCard(this)">
-            <div class="card-title">Парень ➔ Девушке</div>
-            <div class="card-desc">Романтика, примирение, признание</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Отец ➔ Дочери</div>
-            <div class="card-desc">Наставление, забота, благословение</div>
-        </div>
-        <div class="card" onclick="selectCard(this)">
-            <div class="card-title">Наставник ➔ Команде</div>
-            <div class="card-desc">Мотивация, профессиональная поддержка</div>
-        </div>
-    </div>
+    <select id="step1-select" class="custom-select">
+        <option value="Парень ➔ Девушке">Парень ➔ Девушке (Романтика, примирение)</option>
+        <option value="Отец ➔ Дочери">Отец ➔ Дочери (Наставление, забота)</option>
+        <option value="Наставник ➔ Команде">Наставник ➔ Команде (Мотивация, поддержка)</option>
+        <option value="Коллега ➔ Коллеге">Коллега ➔ Коллеге (Благодарность, прощание)</option>
+        <option value="Друг ➔ Другу">Друг ➔ Другу (Душевная беседа)</option>
+    </select>
 
-    <!-- 2. Ситуация и Чувство -->
     <div class="section-title">2. Ситуация и Чувство</div>
     <div class="cards-grid" id="group-2">
         <div class="card" onclick="selectCard(this)">
@@ -258,9 +278,20 @@
             <div class="card-title">В трудный час</div>
             <div class="card-desc">Опора, когда опускаются руки</div>
         </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Выгорание на работе</div>
+            <div class="card-desc">Слова поддержки и веры в силы</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Годовщина</div>
+            <div class="card-desc">Напоминание о пройденном пути</div>
+        </div>
+        <div class="card" onclick="selectCard(this)">
+            <div class="card-title">Неожиданный успех</div>
+            <div class="card-desc">Разделение радости победы</div>
+        </div>
     </div>
 
-    <!-- 3. Интонация -->
     <div class="section-title">3. Интонация</div>
     <div class="cards-grid" id="group-3">
         <div class="card" onclick="selectCard(this)">
@@ -279,7 +310,6 @@
 
     <button class="btn-main" onclick="generateText()">Создать слова</button>
 
-    <!-- Смартфон-мокап с результатом -->
     <div class="phone-mockup" id="phone-mockup">
         <div id="result-section">
             <div id="result-text"></div>
@@ -293,7 +323,6 @@
                 <button class="btn-tuning" onclick="exportAsImage()">Скачать открытку</button>
             </div>
             
-            <!-- История версий -->
             <div class="versions-section" id="versions-container" style="display: none;">
                 <div class="versions-title">Предыдущие версии:</div>
                 <div id="versions-list"></div>
@@ -302,7 +331,6 @@
     </div>
 </div>
 
-<!-- Скрытый блок для рендеринга открытки -->
 <div id="export-card">
     <div class="export-text" id="export-text-content"></div>
     <div class="export-logo">METAPHOR</div>
@@ -325,7 +353,7 @@
         phoneMockup.style.display = 'block';
         resultText.innerText = "Генерируем...";
 
-        const active1 = document.querySelector('#group-1 .card.active .card-title').innerText;
+        const active1 = document.getElementById('step1-select').value;
         const active2 = document.querySelector('#group-2 .card.active .card-title').innerText;
         const active3 = document.querySelector('#group-3 .card.active .card-title').innerText;
 
@@ -355,9 +383,7 @@
         }
     }
 
-    function tuneText(mod) { 
-        generateText(mod); 
-    }
+    function tuneText(mod) { generateText(mod); }
 
     function updateVersionsUI() {
         const container = document.getElementById('versions-container');
@@ -366,7 +392,7 @@
         
         if (textHistory.length > 0) {
             container.style.display = 'block';
-            textHistory.forEach((item, index) => {
+            textHistory.forEach((item) => {
                 const div = document.createElement('div');
                 div.className = 'version-item';
                 div.innerText = item.length > 60 ? item.substring(0, 60) + '...' : item;

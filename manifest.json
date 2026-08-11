@@ -1,15 +1,7 @@
 {
   "name": "Metaphor",
   "short_name": "Metaphor",
-  "start_url": "/",
   "display": "standalone",
   "background_color": "#141415",
-  "theme_color": "#141415",
-  "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3209/3209257.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ]
+  "theme_color": "#141415"
 }
