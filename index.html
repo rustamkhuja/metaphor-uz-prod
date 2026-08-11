@@ -8,11 +8,11 @@
         :root {
             --bg-color: #070707;
             --card-bg: #121212;
-            --border-color: #282828;
+            --border-color: #2c2c2c;
             --accent-gold: #d4b58f;
             --accent-gold-hover: #e2c59d;
-            --text-main: #ffffff;
-            --text-muted: #9a9a9a;
+            --text-main: #f3f3f3;
+            --text-muted: #ababab;
         }
 
         * {
@@ -35,28 +35,28 @@
 
         .container {
             width: 100%;
-            max-width: 640px;
+            max-width: 720px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 34px;
         }
 
         .logo {
-            font-size: 2.6rem;
+            font-size: 3rem;
             font-weight: 400;
             font-family: Georgia, serif;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             color: var(--text-main);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .subtitle {
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             color: var(--text-muted);
-            line-height: 1.5;
-            margin-bottom: 20px;
+            line-height: 1.6;
+            margin-bottom: 24px;
             padding: 0 15px;
         }
 
@@ -64,22 +64,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
             gap: 12px;
         }
 
         .lang-group {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .lang-btn {
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 7px 14px;
-            border-radius: 18px;
-            font-size: 0.82rem;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -87,16 +87,16 @@
         .lang-btn.active {
             border-color: var(--accent-gold);
             color: var(--text-main);
-            background: #181512;
+            background: #1a1612;
         }
 
         .favorites-btn {
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 7px 16px;
-            border-radius: 18px;
-            font-size: 0.82rem;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
             white-space: nowrap;
@@ -107,22 +107,22 @@
         }
 
         section {
-            margin-bottom: 28px;
+            margin-bottom: 32px;
         }
 
         .section-title {
-            font-size: 1.05rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: var(--accent-gold);
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .label-text {
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
         }
 
         .select-wrap {
@@ -130,16 +130,16 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 14px 16px;
-            border-radius: 10px;
-            font-size: 0.96rem;
+            padding: 16px 18px;
+            border-radius: 12px;
+            font-size: 1.05rem;
             outline: none;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239a9a9a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ababab' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 16px center;
-            background-size: 18px;
+            background-position: right 18px center;
+            background-size: 20px;
             cursor: pointer;
         }
 
@@ -147,55 +147,72 @@
             border-color: var(--accent-gold);
         }
 
+        /* Сетка для блоков 2 и 3: ровно по 3 карточки в ряд */
         .cards-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .selectable-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 14px 16px;
+            border-radius: 12px;
+            padding: 18px 16px;
             cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 110px;
         }
 
         .selectable-card:hover {
-            border-color: #444;
+            border-color: #555;
         }
 
         .selectable-card.selected {
             border-color: var(--accent-gold);
-            background: #181512;
+            background: #1a1612;
         }
 
         .card-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             color: var(--text-main);
             pointer-events: none;
         }
 
         .card-desc {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             pointer-events: none;
+            line-height: 1.4;
         }
 
         .custom-input-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 14px 16px;
+            border-radius: 12px;
+            padding: 16px 18px;
             width: 100%;
             color: var(--text-main);
-            font-size: 0.92rem;
+            font-size: 1rem;
             outline: none;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .custom-input-card::placeholder {
@@ -206,15 +223,16 @@
             width: 100%;
             background: var(--accent-gold);
             color: #111;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
-            padding: 16px;
-            border-radius: 10px;
-            font-size: 1.02rem;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.15rem;
             cursor: pointer;
             transition: background 0.2s;
             margin-top: 10px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+            letter-spacing: 0.5px;
         }
 
         .btn-submit:hover {
@@ -225,39 +243,39 @@
             display: none;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 24px;
-            margin-top: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
         }
 
         .result-text {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            color: var(--text-main);
+            font-size: 1.25rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            color: #ffffff;
             white-space: pre-wrap;
             font-family: Georgia, serif;
-            min-height: 80px;
+            min-height: 90px;
         }
 
         .post-menu {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
             margin-top: 20px;
-            margin-bottom: 20px;
-            padding-top: 16px;
+            margin-bottom: 24px;
+            padding-top: 20px;
             border-top: 1px solid var(--border-color);
         }
 
         .btn-mini {
-            background: #1a1a1a;
+            background: #1c1c1c;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 8px 14px;
-            border-radius: 16px;
-            font-size: 0.82rem;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -268,34 +286,34 @@
         }
 
         .history-section {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            padding-top: 16px;
+            margin-top: 24px;
+            margin-bottom: 24px;
+            padding-top: 20px;
             border-top: 1px solid var(--border-color);
         }
 
         .history-title {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
         }
 
         .history-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 200px;
+            gap: 10px;
+            max-height: 220px;
             overflow-y: auto;
         }
 
         .history-item {
-            background: #181818;
+            background: #1a1a1a;
             border: 1px solid var(--border-color);
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 0.88rem;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 0.95rem;
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.2s;
@@ -312,27 +330,92 @@
         .actions-row {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 12px;
+            gap: 12px;
+            margin-top: 14px;
         }
 
         .btn-action {
-            background: #1a1a1a;
+            background: #1c1c1c;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.86rem;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 0.95rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             transition: all 0.2s;
         }
 
         .btn-action:hover {
             border-color: var(--accent-gold);
+        }
+
+        /* Модальное окно редактирования открытки */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-card {
+            background: #161616;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 540px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+        .card-preview-area {
+            background: #111;
+            border: 2px solid var(--accent-gold);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            font-family: Georgia, serif;
+            font-size: 1.2rem;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-textarea {
+            width: 100%;
+            background: #111;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            outline: none;
+            font-family: Georgia, serif;
+        }
+        .modal-textarea:focus {
+            border-color: var(--accent-gold);
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -373,11 +456,11 @@
 
                 <div class="label-text" id="lblTo">Кому:</div>
                 <select id="recipientSelect" class="select-wrap">
-                    <!-- Заполняется динамически через JS в зависимости от отправителя -->
+                    <!-- Заполняется динамически -->
                 </select>
             </section>
 
-            <!-- Блок 2: Ситуация и Чувство -->
+            <!-- Блок 2: Ситуация и Чувство (по 3 в ряду) -->
             <section>
                 <div class="section-title" id="sec2Title">2. Ситуация и Чувство</div>
                 <div class="cards-grid" id="situationCards">
@@ -405,7 +488,7 @@
                 <input type="text" id="customSituation" class="custom-input-card" placeholder="Добавьте точную деталь (необязательно)...">
             </section>
 
-            <!-- Блок 3: Интонация -->
+            <!-- Блок 3: Интонация (по 3 в ряду) -->
             <section>
                 <div class="section-title" id="sec3Title">3. Интонация</div>
                 <div class="cards-grid" id="toneCards">
@@ -442,14 +525,12 @@
             <div id="resultBox" class="result-box">
                 <div id="resultText" class="result-text"></div>
 
-                <!-- Кнопки модификации текста ПОД текстом -->
                 <div class="post-menu">
                     <button class="btn-mini" id="modShorter">Короче</button>
                     <button class="btn-mini" id="modMetaphor">Больше метафор</button>
                     <button class="btn-mini" id="modFormal">Более формально</button>
                 </div>
 
-                <!-- История предыдущих версий -->
                 <div class="history-section" id="historySection" style="display: none;">
                     <div class="history-title" id="historyTitleLabel">Предыдущие версии</div>
                     <div class="history-list" id="historyList"></div>
@@ -465,6 +546,19 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- Модальное окно редактирования открытки -->
+    <div class="modal-overlay" id="cardModal">
+        <div class="modal-card">
+            <div class="modal-title" id="modalTitleText">Редактирование открытки</div>
+            <div class="card-preview-area" id="modalPreview">Текст открытки...</div>
+            <textarea class="modal-textarea" id="modalTextEdit"></textarea>
+            <div class="modal-buttons">
+                <button class="btn-action" style="flex:1;" id="modalCancelBtn">Отмена</button>
+                <button class="btn-submit" style="flex:1; margin:0;" id="modalDownloadBtn">Скачать PNG</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -487,7 +581,6 @@
                 }
             };
 
-            // Умные связи: кто кому может писать
             const allowedRecipients = {
                 father: ['son', 'daughter', 'wife', 'friend'],
                 mother: ['son', 'daughter', 'husband', 'friend'],
@@ -524,6 +617,9 @@
                     metaphor: "Больше метафор",
                     formal: "Более формально",
                     historyLabel: "Предыдущие версии",
+                    modalTitle: "Редактирование открытки перед скачиванием",
+                    modalCancel: "Отмена",
+                    modalDownload: "Скачать PNG",
                     sit1_t: "Тяжелая ссора", sit1_d: "Гордость мешает сказать «прости»",
                     sit2_t: "День до венчания", sit2_d: "Светлая грусть расставания",
                     sit3_t: "В трудный час", sit3_d: "Опора, когда опускаются руки",
@@ -558,6 +654,9 @@
                     metaphor: "Ko'proq metafora",
                     formal: "Rasmiyroq",
                     historyLabel: "Oldingi versiyalar",
+                    modalTitle: "Yuklab olishdan oldin ochiqchani tahrirlash",
+                    modalCancel: "Bekor qilish",
+                    modalDownload: "PNG yuklab olish",
                     sit1_t: "Og'ir janjal", sit1_d: "G'urur 'kechir' deyishga qo'ymayapti",
                     sit2_t: "Nikohdan bir kun oldin", sit2_d: "Yorqin ayriliq qayg'usi",
                     sit3_t: "Og'ir damlar", sit3_d: "Qo'l siltanganda tayanch",
@@ -592,6 +691,9 @@
                     metaphor: "More metaphors",
                     formal: "More formal",
                     historyLabel: "Previous versions",
+                    modalTitle: "Edit postcard before download",
+                    modalCancel: "Cancel",
+                    modalDownload: "Download PNG",
                     sit1_t: "Heavy argument", sit1_d: "Pride prevents saying 'sorry'",
                     sit2_t: "Day before wedding", sit2_d: "Light sadness of parting",
                     sit3_t: "Difficult hour", sit3_d: "Support when hands drop",
@@ -627,7 +729,6 @@
                     recipientSelect.appendChild(opt);
                 });
 
-                // Сохранить выбранное, если оно все еще валидно для этого отправителя
                 if (validKeys.includes(currentRecipientVal)) {
                     recipientSelect.value = currentRecipientVal;
                 }
@@ -653,8 +754,10 @@
                 document.getElementById('downloadCardBtn').innerText = t.cardBtn;
                 document.getElementById('favToggleBtn').innerText = t.toFav;
                 document.getElementById('historyTitleLabel').innerText = t.historyLabel;
+                document.getElementById('modalTitleText').innerText = t.modalTitle;
+                document.getElementById('modalCancelBtn').innerText = t.modalCancel;
+                document.getElementById('modalDownloadBtn').innerText = t.modalDownload;
 
-                // Перезаполнить селект отправителя на текущем языке
                 const currentSenderVal = senderSelect.value || 'father';
                 senderSelect.innerHTML = '';
                 Object.keys(rolesDict[currentLang]).forEach(key => {
@@ -665,15 +768,12 @@
                 });
                 senderSelect.value = currentSenderVal;
 
-                // Обновить список получателей
                 updateRecipients();
 
-                // Карточки ситуаций
                 for (let i = 1; i <= 5; i++) {
                     if (document.getElementById(`sit${i}_t`)) document.getElementById(`sit${i}_t`).innerText = t[`sit${i}_t`];
                     if (document.getElementById(`sit${i}_d`)) document.getElementById(`sit${i}_d`).innerText = t[`sit${i}_d`];
                 }
-                // Карточки тона
                 for (let i = 1; i <= 6; i++) {
                     if (document.getElementById(`tone${i}_t`)) document.getElementById(`tone${i}_t`).innerText = t[`tone${i}_t`];
                     if (document.getElementById(`tone${i}_d`)) document.getElementById(`tone${i}_d`).innerText = t[`tone${i}_d`];
@@ -688,7 +788,6 @@
                 document.getElementById('favCountBtn').innerText = `❤️ ${t.fav} ( ${favorites.length} )`;
             }
 
-            // Переключение языков
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -705,7 +804,6 @@
             });
             updateUI();
 
-            // Карточки ситуаций
             document.querySelectorAll('#situationCards .selectable-card').forEach(card => {
                 card.addEventListener('click', () => {
                     document.querySelectorAll('#situationCards .selectable-card').forEach(c => c.classList.remove('selected'));
@@ -714,7 +812,6 @@
                 });
             });
 
-            // Карточки тона
             document.querySelectorAll('#toneCards .selectable-card').forEach(card => {
                 card.addEventListener('click', () => {
                     document.querySelectorAll('#toneCards .selectable-card').forEach(c => c.classList.remove('selected'));
@@ -728,6 +825,15 @@
             const resultText = document.getElementById('resultText');
             const historySection = document.getElementById('historySection');
             const historyList = document.getElementById('historyList');
+
+            // Имитация печатания (Typewriter effect)
+            function typeWriter(text, i = 0) {
+                if (i === 0) resultText.innerText = '';
+                if (i < text.length) {
+                    resultText.innerText += text.charAt(i);
+                    setTimeout(() => typeWriter(text, i + 1), 12);
+                }
+            }
 
             function generateText(modifier = '') {
                 const custom = document.getElementById('customSituation').value.trim();
@@ -775,7 +881,7 @@
                 }
 
                 resultBox.style.display = 'block';
-                resultText.innerText = baseText;
+                typeWriter(baseText);
                 window.scrollTo({ top: resultBox.offsetTop - 20, behavior: 'smooth' });
             }
 
@@ -837,7 +943,26 @@
                 updateFavCount();
             });
 
+            // Модальное окно редактирования открытки перед скачиванием
+            const cardModal = document.getElementById('cardModal');
+            const modalTextEdit = document.getElementById('modalTextEdit');
+            const modalPreview = document.getElementById('modalPreview');
+
             document.getElementById('downloadCardBtn').addEventListener('click', () => {
+                modalTextEdit.value = resultText.innerText;
+                modalPreview.innerText = resultText.innerText;
+                cardModal.style.display = 'flex';
+            });
+
+            modalTextEdit.addEventListener('input', () => {
+                modalPreview.innerText = modalTextEdit.value;
+            });
+
+            document.getElementById('modalCancelBtn').addEventListener('click', () => {
+                cardModal.style.display = 'none';
+            });
+
+            document.getElementById('modalDownloadBtn').addEventListener('click', () => {
                 const canvas = document.createElement('canvas');
                 canvas.width = 1000; canvas.height = 1000;
                 const ctx = canvas.getContext('2d');
@@ -855,9 +980,9 @@
                 ctx.fillText('METAPHOR', 500, 130);
 
                 ctx.fillStyle = '#ffffff';
-                ctx.font = '28px Georgia, serif';
+                ctx.font = '30px Georgia, serif';
                 
-                const words = resultText.innerText.split(' ');
+                const words = modalTextEdit.value.split(' ');
                 let line = '', lines = [];
                 for (let w of words) {
                     let test = line + w + ' ';
@@ -866,13 +991,15 @@
                 }
                 lines.push(line);
 
-                let startY = 500 - ((lines.length * 40) / 2);
-                lines.forEach((l, i) => ctx.fillText(l, 500, startY + (i * 45)));
+                let startY = 500 - ((lines.length * 45) / 2);
+                lines.forEach((l, i) => ctx.fillText(l, 500, startY + (i * 48)));
 
                 const link = document.createElement('a');
                 link.download = 'metaphor-card.png';
                 link.href = canvas.toDataURL();
                 link.click();
+                
+                cardModal.style.display = 'none';
             });
         });
     </script>
