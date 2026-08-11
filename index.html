@@ -359,20 +359,21 @@
                 <div class="section-title" id="sec1Title">1. Кто и кому?</div>
                 <div class="label-text" id="lblFrom">От кого:</div>
                 <select id="senderSelect" class="select-wrap">
-                    <option value="father" id="optSenderFather">Отец</option>
-                    <option value="mother" id="optSenderMother">Мать</option>
-                    <option value="husband" id="optSenderHusband">Муж</option>
-                    <option value="wife" id="optSenderWife">Жена</option>
-                    <option value="friend" id="optSenderFriend">Друг</option>
+                    <option value="father">Отец</option>
+                    <option value="mother">Мать</option>
+                    <option value="husband">Муж</option>
+                    <option value="wife">Жена</option>
+                    <option value="son">Сын</option>
+                    <option value="daughter">Дочь</option>
+                    <option value="friend">Друг</option>
+                    <option value="boss">Начальник</option>
+                    <option value="subordinate">Подчиненный</option>
+                    <option value="colleague">Коллега</option>
                 </select>
 
                 <div class="label-text" id="lblTo">Кому:</div>
                 <select id="recipientSelect" class="select-wrap">
-                    <option value="son" id="optRecSon">Сын</option>
-                    <option value="daughter" id="optRecDaughter">Дочь</option>
-                    <option value="wife" id="optRecWife">Жена</option>
-                    <option value="husband" id="optRecHusband">Муж</option>
-                    <option value="friend" id="optRecFriend">Друг</option>
+                    <!-- Заполняется динамически через JS в зависимости от отправителя -->
                 </select>
             </section>
 
@@ -468,6 +469,38 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const rolesDict = {
+                ru: {
+                    father: "Отец", mother: "Мать", husband: "Муж", wife: "Жена",
+                    son: "Сын", daughter: "Дочь", friend: "Друг",
+                    boss: "Начальник", subordinate: "Подчиненный", colleague: "Коллега"
+                },
+                uz: {
+                    father: "Ota", mother: "Ona", husband: "Er", wife: "Xotin",
+                    son: "O'g'il", daughter: "Qiz", friend: "Do'st",
+                    boss: "Rahbar", subordinate: "Bo'ysunuvchi", colleague: "Hamkasb"
+                },
+                en: {
+                    father: "Father", mother: "Mother", husband: "Husband", wife: "Wife",
+                    son: "Son", daughter: "Daughter", friend: "Friend",
+                    boss: "Boss", subordinate: "Subordinate", colleague: "Colleague"
+                }
+            };
+
+            // Умные связи: кто кому может писать
+            const allowedRecipients = {
+                father: ['son', 'daughter', 'wife', 'friend'],
+                mother: ['son', 'daughter', 'husband', 'friend'],
+                husband: ['wife', 'friend', 'colleague'],
+                wife: ['husband', 'friend', 'colleague'],
+                son: ['father', 'mother', 'friend'],
+                daughter: ['father', 'mother', 'friend'],
+                friend: ['friend', 'colleague'],
+                boss: ['subordinate', 'colleague'],
+                subordinate: ['boss', 'colleague'],
+                colleague: ['colleague', 'boss', 'subordinate', 'friend']
+            };
+
             const i18n = {
                 ru: {
                     subtitle: "Слова, которых вам не хватало. Выберите ситуацию, а мы найдем форму.",
@@ -491,8 +524,6 @@
                     metaphor: "Больше метафор",
                     formal: "Более формально",
                     historyLabel: "Предыдущие версии",
-                    father: "Отец", mother: "Мать", husband: "Муж", wife: "Жена", friend: "Друг",
-                    son: "Сын", daughter: "Дочь",
                     sit1_t: "Тяжелая ссора", sit1_d: "Гордость мешает сказать «прости»",
                     sit2_t: "День до венчания", sit2_d: "Светлая грусть расставания",
                     sit3_t: "В трудный час", sit3_d: "Опора, когда опускаются руки",
@@ -527,8 +558,6 @@
                     metaphor: "Ko'proq metafora",
                     formal: "Rasmiyroq",
                     historyLabel: "Oldingi versiyalar",
-                    father: "Ota", mother: "Ona", husband: "Er", wife: "Xotin", friend: "Do'st",
-                    son: "O'g'il", daughter: "Qiz",
                     sit1_t: "Og'ir janjal", sit1_d: "G'urur 'kechir' deyishga qo'ymayapti",
                     sit2_t: "Nikohdan bir kun oldin", sit2_d: "Yorqin ayriliq qayg'usi",
                     sit3_t: "Og'ir damlar", sit3_d: "Qo'l siltanganda tayanch",
@@ -563,8 +592,6 @@
                     metaphor: "More metaphors",
                     formal: "More formal",
                     historyLabel: "Previous versions",
-                    father: "Father", mother: "Mother", husband: "Husband", wife: "Wife", friend: "Friend",
-                    son: "Son", daughter: "Daughter",
                     sit1_t: "Heavy argument", sit1_d: "Pride prevents saying 'sorry'",
                     sit2_t: "Day before wedding", sit2_d: "Light sadness of parting",
                     sit3_t: "Difficult hour", sit3_d: "Support when hands drop",
@@ -583,6 +610,30 @@
             let selectedSit = 'sit1';
             let selectedTone = 'tone2';
             let textHistory = [];
+
+            const senderSelect = document.getElementById('senderSelect');
+            const recipientSelect = document.getElementById('recipientSelect');
+
+            function updateRecipients() {
+                const currentSender = senderSelect.value;
+                const validKeys = allowedRecipients[currentSender] || ['friend'];
+                const currentRecipientVal = recipientSelect.value;
+
+                recipientSelect.innerHTML = '';
+                validKeys.forEach(key => {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.innerText = rolesDict[currentLang][key] || key;
+                    recipientSelect.appendChild(opt);
+                });
+
+                // Сохранить выбранное, если оно все еще валидно для этого отправителя
+                if (validKeys.includes(currentRecipientVal)) {
+                    recipientSelect.value = currentRecipientVal;
+                }
+            }
+
+            senderSelect.addEventListener('change', updateRecipients);
 
             function updateUI() {
                 const t = i18n[currentLang];
@@ -603,19 +654,19 @@
                 document.getElementById('favToggleBtn').innerText = t.toFav;
                 document.getElementById('historyTitleLabel').innerText = t.historyLabel;
 
-                // Селекты (отправитель)
-                document.getElementById('optSenderFather').innerText = t.father;
-                document.getElementById('optSenderMother').innerText = t.mother;
-                document.getElementById('optSenderHusband').innerText = t.husband;
-                document.getElementById('optSenderWife').innerText = t.wife;
-                document.getElementById('optSenderFriend').innerText = t.friend;
-                
-                // Селекты (получатель)
-                document.getElementById('optRecSon').innerText = t.son;
-                document.getElementById('optRecDaughter').innerText = t.daughter;
-                document.getElementById('optRecWife').innerText = t.wife;
-                document.getElementById('optRecHusband').innerText = t.husband;
-                document.getElementById('optRecFriend').innerText = t.friend;
+                // Перезаполнить селект отправителя на текущем языке
+                const currentSenderVal = senderSelect.value || 'father';
+                senderSelect.innerHTML = '';
+                Object.keys(rolesDict[currentLang]).forEach(key => {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.innerText = rolesDict[currentLang][key];
+                    senderSelect.appendChild(opt);
+                });
+                senderSelect.value = currentSenderVal;
+
+                // Обновить список получателей
+                updateRecipients();
 
                 // Карточки ситуаций
                 for (let i = 1; i <= 5; i++) {
@@ -678,7 +729,7 @@
             const historySection = document.getElementById('historySection');
             const historyList = document.getElementById('historyList');
 
-            function generateText(modifier = '', keepHistory = false) {
+            function generateText(modifier = '') {
                 const custom = document.getElementById('customSituation').value.trim();
                 
                 const library = {
@@ -718,7 +769,6 @@
                     baseText = "Свидетельствуя искреннее уважение, отмечаю: " + baseText;
                 }
 
-                // Сохранение в историю предыдущего текста, если он уже был
                 if (resultText.innerText && resultText.innerText !== baseText) {
                     textHistory.unshift(resultText.innerText);
                     renderHistory();
@@ -733,7 +783,7 @@
                 if (textHistory.length > 0) {
                     historySection.style.display = 'block';
                     historyList.innerHTML = '';
-                    textHistory.forEach((itemText, index) => {
+                    textHistory.forEach((itemText) => {
                         const div = document.createElement('div');
                         div.className = 'history-item';
                         div.innerText = itemText;
@@ -749,7 +799,7 @@
             }
 
             generateBtn.addEventListener('click', () => {
-                textHistory = []; // Сброс истории при новой генерации
+                textHistory = [];
                 renderHistory();
                 generateText();
             });
@@ -758,7 +808,6 @@
             document.getElementById('modMetaphor').addEventListener('click', () => generateText('добавь метафор'));
             document.getElementById('modFormal').addEventListener('click', () => generateText('сделай более формально'));
 
-            // Кнопки действий
             document.getElementById('copyBtn').addEventListener('click', () => {
                 navigator.clipboard.writeText(resultText.innerText);
                 alert(i18n[currentLang].copied);
