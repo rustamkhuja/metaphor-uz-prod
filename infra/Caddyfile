@@ -1,0 +1,17 @@
+{$DOMAIN:localhost} {
+    encode zstd gzip
+    reverse_proxy app:8000
+
+    @widget path /widget /static/widget.js /static/embed.js
+    @notWidget not path /widget /static/widget.js /static/embed.js
+
+    header @widget Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors {$WIDGET_FRAME_ANCESTORS:'self'}"
+    header @notWidget Content-Security-Policy "default-src 'self'; script-src 'self' https://telegram.org; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    header @notWidget X-Frame-Options "DENY"
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    }
+}

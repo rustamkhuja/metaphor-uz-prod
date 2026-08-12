@@ -1,0 +1,32 @@
+name: Metaphor CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install --requirement requirements.txt
+
+      - name: Release checks
+        run: sh ./scripts/release_check.sh
+
+      - name: Build container
+        run: docker build --tag metaphor-ai-os:${{ github.sha }} .

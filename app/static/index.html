@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Metaphor — слова для важного разговора</title>
+  <meta name="description" content="Создайте или улучшите личное сообщение на русском, узбекском или английском.">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/">Metaphor</a>
+      <select id="lang" aria-label="Язык интерфейса">
+        <option value="ru">Русский</option>
+        <option value="uz">O‘zbekcha</option>
+        <option value="en">English</option>
+      </select>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="hero-title"></h1>
+      <p id="hero-subtitle"></p>
+    </section>
+
+    <section class="panel">
+      <div class="modes" role="tablist" aria-label="Режим">
+        <button class="mode active" data-mode="write"></button>
+        <button class="mode" data-mode="reply"></button>
+        <button class="mode" data-mode="improve"></button>
+        <button class="mode" data-mode="tone_check"></button>
+      </div>
+
+      <form id="form">
+        <div class="grid two">
+          <label><span id="relationship-label"></span>
+            <select name="relationship">
+              <option value="partner"></option><option value="friend"></option><option value="parent"></option>
+              <option value="colleague"></option><option value="client"></option><option value="other"></option>
+            </select>
+          </label>
+          <label><span id="goal-label"></span>
+            <select name="goal">
+              <option value="apologize"></option><option value="support"></option><option value="thank"></option>
+              <option value="reconcile"></option><option value="congratulate"></option><option value="set_boundary"></option>
+              <option value="explain"></option>
+            </select>
+          </label>
+        </div>
+
+        <label class="full" id="source-label"><span id="source-label-text"></span>
+          <textarea name="context" rows="6" required></textarea>
+        </label>
+
+        <div class="grid three">
+          <label><span id="tone-label"></span>
+            <select name="tone">
+              <option value="warm"></option><option value="calm"></option><option value="firm"></option>
+              <option value="formal"></option><option value="light"></option><option value="romantic"></option>
+            </select>
+          </label>
+          <label><span id="length-label"></span>
+            <select name="length">
+              <option value="short"></option><option value="medium" selected></option><option value="long"></option>
+            </select>
+          </label>
+          <label><span id="address-label"></span>
+            <select name="address_form">
+              <option value="auto"></option><option value="informal"></option><option value="formal"></option>
+            </select>
+          </label>
+        </div>
+
+        <label class="consent"><input type="checkbox" name="accepted_terms" required><span><span id="consent-text"></span> <a id="privacy-more" href="/privacy"></a></span></label>
+        <button class="primary" id="submit-button" type="submit"></button>
+        <p class="fine" id="fine-text"></p>
+      </form>
+    </section>
+
+    <section id="result" class="panel result hidden" aria-live="polite">
+      <div class="result-head"><h2 id="result-title"></h2><span id="model"></span></div>
+      <div id="variants"></div>
+      <div class="actions">
+        <button id="copy" type="button"></button><button id="share" type="button"></button>
+        <button class="refine" data-refine="shorter" type="button"></button>
+        <button class="refine" data-refine="warmer" type="button"></button>
+        <button class="refine" data-refine="firmer" type="button"></button>
+      </div>
+      <div class="feedback"><span id="fit-label"></span><button data-rating="1" id="yes-button"></button><button data-rating="-1" id="no-button"></button></div>
+    </section>
+
+    <footer><a href="/privacy" id="privacy-link"></a><a href="/terms" id="terms-link"></a><span>© Metaphor</span></footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

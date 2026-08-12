@@ -1,0 +1,19 @@
+brand: Metaphor
+promise: "Помочь человеку выразить собственную мысль, а не заменить её чужим голосом."
+voice:
+  - human
+  - calm
+  - precise
+  - culturally aware
+  - never preachy
+avoid:
+  - generic AI clichés
+  - invented quotations
+  - manipulation and guilt
+  - excessive pathos
+  - pseudo-therapy
+  - claims without sources
+languages:
+  ru: "Современный естественный русский; без канцелярита."
+  uz: "Естественный узбекский; без буквальной кальки; уважительные формы по контексту."
+  en: "Natural contemporary English."

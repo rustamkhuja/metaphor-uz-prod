@@ -1,0 +1,11 @@
+metric,definition,source,decision_use
+started_generation,valid submit received,API event,funnel
+completed_generation,LLM result stored and returned,generations,denominator
+copy_share,copy/share feedback event,feedback,north star
+positive_feedback,explicit thumbs up,feedback,quality
+negative_feedback,explicit thumbs down,feedback,quality backlog
+unique_user,distinct client_id,generations,reach
+returning_user_30d,client_id active in later 30d window,generations,retention
+ai_cost_usd,recorded provider cost,generations,budget
+content_product_conversion,completed generation attributed to campaign,campaign params,growth
+paid_conversion,payer/eligible user,payment system,monetization

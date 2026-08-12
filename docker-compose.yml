@@ -1,0 +1,89 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-metaphor}
+      POSTGRES_USER: ${POSTGRES_USER:-metaphor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-metaphor} -d ${POSTGRES_DB:-metaphor}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-metaphor}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-metaphor}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - runtime_data:/app/runtime
+      - exports_data:/app/exports
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  worker:
+    build: .
+    restart: unless-stopped
+    command: ["python", "scripts/run_scheduler.py"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-metaphor}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-metaphor}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - runtime_data:/app/runtime
+      - exports_data:/app/exports
+
+  backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-metaphor}
+      POSTGRES_USER: ${POSTGRES_USER:-metaphor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-14}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./infra/backup.sh:/usr/local/bin/metaphor-backup:ro
+      - backups_data:/backups
+    command: ["sh", "/usr/local/bin/metaphor-backup"]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+      WIDGET_FRAME_ANCESTORS: ${WIDGET_FRAME_ANCESTORS:-'self'}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  runtime_data:
+  exports_data:
+  backups_data:
+  caddy_data:
+  caddy_config:

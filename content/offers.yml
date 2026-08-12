@@ -1,0 +1,17 @@
+# Recommended launch configuration. Commercial activation requires owner approval.
+free:
+  daily_generations: 3
+  variants: 1
+  features: [write, reply, improve, tone_check]
+premium_single:
+  working_name: "Важное сообщение"
+  recommended_price_uzs: 19900
+  variants: 3
+  features: [deep_context, perception_check, three_tones, no_branding]
+credit_pack:
+  working_name: "10 важных сообщений"
+  recommended_price_uzs: 99000
+b2b_widget:
+  recommended_setup_fee_uzs: 5000000
+  recommended_monthly_fee_uzs: 3000000
+  pilot_days: 30
